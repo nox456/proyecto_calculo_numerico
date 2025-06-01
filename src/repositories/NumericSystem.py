@@ -9,6 +9,11 @@ class NumericSystem:
             raise Exception("Manage-Error: Debe ingresar un numero")
         self.__number = self.__utilNumber(number)
 
+    def setNumber(self, number):
+        if len(number) == 0:
+            raise Exception("Manage-Error: Debe ingresar un numero")
+        self.__number = self.__utilNumber(number)
+
     def __isDecimal(self, number):
         decimal_chars = "0123456789"
         for char in number:
