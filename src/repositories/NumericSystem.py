@@ -59,14 +59,14 @@ class NumericSystem:
         for char in number:
             if char.upper() not in chars_allowed:
                 raise Exception(
-                    "Manage-Error: El numero ingresado no es valido")
+                    f"Manage-Error: El numero {number} ingresado no es valido")
         if number.startswith((".", ",")) or number.endswith((".", ",")):
             raise Exception(
-                "Manage-Error: El numero ingresado no es valido")
+                f"Manage-Error: El numero {number} ingresado no es valido")
         separatorCount = number.count(".") + number.count(",")
         if separatorCount > 1:
             raise Exception(
-                "Manage-Error: El numero ingresado no es valido")
+                f"Manage-Error: El numero {number} ingresado no es valido")
         if number == "0":
             return "0"
         else:
