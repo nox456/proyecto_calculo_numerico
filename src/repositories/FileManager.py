@@ -33,6 +33,17 @@ class FileManager:
                 files = appendArray(files, str(entry))
         return files
 
+    def getPath(self):
+        return self.__path
+
+    def writeFile(self, fileName, content):
+        filePath = os.path.join(self.__path, fileName)
+        try:
+            file = open(filePath, "a")
+            file.write(content)
+        except FileNotFoundError as e:
+            print(f"Manage-Error: El archivo no existe: {e}")
+
     def __utilPath(self, path):
         if not os.path.exists(path):
             raise Exception("Manage-Error: La ruta ingresada no existe")
