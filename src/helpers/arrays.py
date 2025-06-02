@@ -7,3 +7,10 @@ def appendArray(array, value):
         arrayAux[i] = array[i]
     arrayAux[len(array)] = value
     return arrayAux
+
+
+def containsArray(array, value):
+    for i in range(len(array)):
+        if array[i] == value:
+            return True
+    return False
