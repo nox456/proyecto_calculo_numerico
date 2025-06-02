@@ -16,16 +16,7 @@ class FileManager:
             raise Exception("Manage-Error: Debe ingresar una ruta")
         self.__path = self.__utilPath(path)
 
-    def readFiles(self):
-        files = self.__listFiles()
-        print("Archivos disponibles:")
-        for i in range(len(files)):
-            print(f"{i + 1}. {files[i]}")
-        choice = int(input(f"Elige el archivo a leer (1-{len(files)}): "))
-        file = self.__openFile(files[choice - 1])
-        return file
-
-    def __openFile(self, fileName):
+    def openFile(self, fileName):
         filePath = os.path.join(self.__path, fileName)
         try:
             file = open(filePath, "rb")
@@ -34,7 +25,7 @@ class FileManager:
             print(f"Manage-Error: El archivo no existe: {e}")
             return None
 
-    def __listFiles(self):
+    def listFiles(self):
         directoryEntries = np.array(os.listdir(self.__path))
         files = np.array([])
         for entry in directoryEntries:
