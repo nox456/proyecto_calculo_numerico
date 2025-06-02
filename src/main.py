@@ -13,6 +13,8 @@ def main():
     numbers = getNumbers(content)
     systemManager = NumericSystem()
     setSystems(numbers, systemManager)
+    # TODO: initialize SigFigs ADT
+    # TODO: initialize ElemsOps ADT
 
 
 main()
