@@ -1,5 +1,6 @@
 from helpers.arrays import appendArray
-from validations.fileLine import validateFileLine
+from validations.files import validateFileLine, validateFileElement
+from validations.systems import validatePossibleSystems
 
 
 def getNumbers(fileContent):
@@ -8,6 +9,15 @@ def getNumbers(fileContent):
         line = validateFileLine(fileContent[i])
         if line is not None:
             lineNumbers = line.split("#")
-            for number in lineNumbers:
+            for i in range(len(lineNumbers)):
+                number = validateFileElement(lineNumbers[i])
                 numbers = appendArray(numbers, number)
     return numbers
+
+
+def setSystems(numbers, systemManager):
+    for number in numbers:
+        if number.isValid():
+            systems = validatePossibleSystems(systemManager, number.getValue())
+            if systems is not None:
+                number.setSystems(systems)

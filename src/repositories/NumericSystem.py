@@ -4,10 +4,8 @@ import numpy as np
 class NumericSystem:
     __number = "0"
 
-    def __init__(self, number="0"):
-        if len(number) == 0:
-            raise Exception("Manage-Error: Debe ingresar un numero")
-        self.__number = self.__utilNumber(number)
+    def __init__(self):
+        self.__number = "0"
 
     def setNumber(self, number):
         if len(number) == 0:
