@@ -25,6 +25,12 @@ class Number:
 
     def getSystems(self):
         return self.__systems
+    
+    def setFigs(self, Figs):
+        self.__sigFigs=Figs
+
+    def getFigs(self):
+        return self.__sigFigs
 
     def __utilValue(self, value):
         chars_allowed = "0123456789ABCDEF.,"

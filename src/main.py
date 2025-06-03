@@ -1,6 +1,8 @@
 from proccess.files import selectFile, createResultFile
 from proccess.numbers import getNumbers, setSystems
+from proccess.figures import getSigFigs
 from repositories.NumericSystem import NumericSystem
+from repositories.SigFigures import SigFigures
 from repositories.FileManager import FileManager
 
 
@@ -15,10 +17,11 @@ def main():
     numbers = getNumbers(content)
     systemManager = NumericSystem()
     setSystems(numbers, systemManager)
-    # TODO: initialize SigFigs ADT
+    figuresManager = SigFigures("0")
+    getSigFigs(figuresManager, numbers)
     # TODO: initialize ElemsOps ADT
     fileManager.setRouter(
-        "/home/nox/Documentos/Projects/Proyecto_Calculo_Numerico/src/storage")
+        "./src/storage/")
     createResultFile(fileManager, file.getName(), numbers)
 
     print("-- PROGRAMA TERMINADO --")

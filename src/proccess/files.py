@@ -33,7 +33,8 @@ def createResultFile(manager, sourceFileName, numbers):
             joinedSystems = ""
             for system in systems:
                 joinedSystems = f"{joinedSystems},{system}"
-            resultLine = f"{number.getValue()}#{joinedSystems[1:]}\n"
+
+            resultLine = f"{number.getValue()}#{joinedSystems[1:]}#{number.getFigs()}\n"
             # TODO: add ElemsOps to resultLine
             # TODO: add SigFigs to resultLine
         else:
