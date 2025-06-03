@@ -3,7 +3,6 @@
 ### main.py
 - Initialize SigFigs ADT in main.py
 - Initialize ElemsOps ADT in main.py
-- Create txt result file in storage
 
 ### validations
 - Create SigFigs validations
@@ -12,7 +11,6 @@
 ### proccess
 - Add SigFigs proccess to numbers.py
 - Add ElemsOps proccess to numbers.py
-- Add createFile proccess to files.py
 
 ### repositories
 - Create SigFigs ADT

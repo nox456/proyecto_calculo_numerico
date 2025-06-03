@@ -20,3 +20,6 @@ class FileEntry:
 
     def getContent(self):
         return self.__content
+
+    def getName(self):
+        return self.__name
