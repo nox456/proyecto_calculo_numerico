@@ -1,5 +1,6 @@
 from validations.selector import validateSelector
 from repositories.FileEntry import FileEntry
+from validations.files import validateSourceFileName
 import numpy as np
 import random
 
@@ -20,6 +21,8 @@ def selectFile(manager):
 
 
 def createResultFile(manager, sourceFileName, numbers):
+    if validateSourceFileName(sourceFileName) is None:
+        return
     sourceFileAttributes = np.array(sourceFileName.rstrip(".bin").split("_"))
     newSerial = random.randint(1000, 9999)
     resultFileName = f"{sourceFileAttributes[2]}_{

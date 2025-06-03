@@ -21,3 +21,15 @@ def validateFileElement(element):
         print(e)
         return Number(element, False)
     return number
+
+
+def validateSourceFileName(name):
+    try:
+        if containsArray(name, "_"):
+            return name
+        else:
+            raise Exception(
+                "SourceFileName-Error: El nombre del archivo fuente es incorrecto")
+    except Exception as e:
+        print(e)
+        return None
