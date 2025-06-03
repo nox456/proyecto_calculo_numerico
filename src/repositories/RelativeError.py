@@ -1,34 +1,16 @@
-from AbsoluteError import AbsoluteError
+from repositories.AbsoluteError import AbsoluteError
 
 
 class RelativeError(AbsoluteError):
 
-    __relError = 0.0
-
     def __init__(self, value, aproxValue):
-        super().__init__(value)
-        self.setValue(value)
-        self.setAproxValue(aproxValue)
-        self._errorValue = 0.0
+        super().__init__(value, aproxValue)
 
-    def setAproxValue(self, value):
-        if value is None:
-            raise Exception("Manage-Error: El valor aproximado no puede ser None")
-        self._aproxValue = value
+    def getError(self):
+        self._calcRelError()
+        return self._error
 
-    def getAproxValue(self): 
-        return self._aproxValue
-    
-    def getErrorValue(self):
-        return self._errorValue
-    
-    def getRelError(self):
-        if self.__relError == 0.0:
-            self.__calcRelError()
-        return self.__relError
-
-    def calcRelError(self):
-        super()._calcError()
+    def _calcRelError(self):
         if self._value == 0:
-            raise Exception("Manage-Error: El valor aproximado no puede ser cero para calcular el error relativo")
-        self.__relError = self._errorValue / abs(self._value)
+            raise Exception("Manage-Error: El valor no puede ser cero para calcular el error relativo")
+        self._error = super().getAbsError() / abs(self._value)

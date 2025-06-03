@@ -1,27 +1,25 @@
-from Error import Error
+from repositories.Error import Error
 
 
 class AbsoluteError(Error):
 
     _aproxValue = 0.0
-    _errorValue = 0.0
 
-    def __init__(self, value):
+    def __init__(self, value, aproxValue):
         super().__init__(value)
-        self.setValue(value)
-        self._aproxValue = 0.0
-        self._errorValue = 0.0
+        self._aproxValue = aproxValue
 
-    def setAproxValue(self, value):
-        if value is None:
-            raise Exception("Manage-Error: El valor aproximado no puede ser None")
-        self._aproxValue = value
+    def setAproxValue(self, aproxValue):
+        if aproxValue is None:
+            raise Exception("Manage-Error: Debe ingresar un valor aproximado")
+        self._aproxValue = aproxValue
 
-    def getAproxValue(self): 
+    def getAproxValue(self):
         return self._aproxValue
-    
-    def getErrorValue(self):
-        return self._errorValue
 
-    def _calcError(self):
-        self._errorValue = abs(self._value - self._aproxValue)
+    def getAbsError(self):
+        self._calcAbsError()
+        return self._error
+
+    def _calcAbsError(self):
+        self._error = abs(self._value - self._aproxValue)

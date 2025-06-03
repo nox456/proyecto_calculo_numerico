@@ -30,7 +30,6 @@ class ElementalOperations:
 
     # Utilitarias
 
-    
     def __getOperations(self):
         for operation in self.__base:
             if operation == "Decimal":
@@ -42,11 +41,6 @@ class ElementalOperations:
             else:
                 raise Exception("Manage-Error: Operacion no valida")
             
-
-
-    def decimalOperation(self, number):
-        
-
 
     def __utilNumber(self, number):
         chars_allowed = "0123456789ABCDEF.,"
