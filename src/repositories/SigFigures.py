@@ -28,7 +28,7 @@ class SigFigures:
         cont+=cont2
         rfig2=fig2[::-1]
         fig+=rfig2
-        self.mostrar(cont,fig)
+        return self.mostrar(cont,fig)
 
     def separateNumber(self):
         flag = False
@@ -41,13 +41,14 @@ class SigFigures:
                 flag=True
             if(flag):
                 number2+=digits
-        print("n1:"+str(number1)+" n2: "+str(number2))
         return number1, number2
         
 
     def cantFigures(self,num):
+        isADot=False
         figures=""
         cont=0
+        cantDots=0
         for digit in num:
             if(digit!="0" and digit!="." and digit!=","):
                 self.__isZero=False
@@ -55,13 +56,16 @@ class SigFigures:
                cont+=1
                figures+=digit
             if(digit=="." or digit==","):
+                cantDots+=1
                 cont-=1
+            if(cantDots>=2):
+                raise Exception("Manage -Error: Doble punto decimal")
         self.__isZero=True
         return cont, figures
     
     def mostrar(self,con,figures):
-        print("Cantidad de cifras: "+str(con))
-        print("\nCifras en si: "+figures)
+        return "Cantidad de cifras: "+str(con)+" Cifras en si: "+figures
+
 
     #utilitaries
     def utilNumber(self, number):
@@ -69,6 +73,3 @@ class SigFigures:
             return False
         return True
 
-    
-obj= SigFigures("112.5001")
-obj.operation()
