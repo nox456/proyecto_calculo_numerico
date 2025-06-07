@@ -25,9 +25,9 @@ class Number:
 
     def getSystems(self):
         return self.__systems
-    
+
     def setFigs(self, Figs):
-        self.__sigFigs=Figs
+        self.__sigFigs = Figs
 
     def getFigs(self):
         return self.__sigFigs

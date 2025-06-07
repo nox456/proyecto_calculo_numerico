@@ -16,6 +16,8 @@ class FileEntry:
         content = np.array([])
         for line in rawContent:
             content = appendArray(content, line.decode("utf-8").strip())
+        if len(content) == 0:
+            raise Exception("FileContent-Error: El archivo está vacío")
         return content
 
     def getContent(self):
