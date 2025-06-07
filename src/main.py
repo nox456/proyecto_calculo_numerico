@@ -14,11 +14,14 @@ def main():
         print("-- PROGRAMA TERMINADO --")
         return
     content = file.getContent()
-    numbers = getNumbers(content)
+    numbers = getNumbers(content, fileManager)
+    if len(numbers) == 0:
+        print("-- PROGRAMA TERMINADO --")
+        return
     systemManager = NumericSystem()
-    setSystems(numbers, systemManager)
+    setSystems(numbers, systemManager, fileManager)
     figuresManager = SigFigures("0")
-    getSigFigs(figuresManager, numbers)
+    getSigFigs(figuresManager, numbers, fileManager)
     # TODO: initialize ElemsOps ADT
     fileManager.setRouter(
         "./src/storage/")

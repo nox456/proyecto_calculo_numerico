@@ -1,5 +1,7 @@
+from proccess.errors import createLogFile
 
-def validateSelector(min, max, text):
+
+def validateSelector(min, max, text, fileManager):
     while True:
         try:
             value = int(input(text + "(-1) para salir: "))
@@ -7,7 +9,8 @@ def validateSelector(min, max, text):
                 return -1
             if value < min or value > max:
                 raise Exception(
-                    "Selection-Error: El valor debe estar entre los límites")
+                    f"Selection-Error: El valor debe estar entre los límites: {value}")
             return value
         except Exception as e:
             print(e)
+            createLogFile(fileManager, e)
