@@ -8,9 +8,8 @@ def validateSelector(min, max, text, fileManager):
             if value == -1:
                 return -1
             if value < min or value > max:
-                raise Exception(
-                    f"Selection-Error: El valor debe estar entre los límites: {value}")
+                raise Exception("El valor debe estar entre los límites")
             return value
-        except Exception as e:
-            print(e)
-            createLogFile(fileManager, e)
+        except Exception as error:
+            print(error)
+            createLogFile(fileManager, error, error.__traceback__, value)

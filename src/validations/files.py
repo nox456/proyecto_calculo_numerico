@@ -10,10 +10,9 @@ def validateFileLine(line, manager):
             return line
         else:
             raise Exception(
-                f"FileLine-Error: El formato de la linea es incorrecto: {line}")
-    except Exception as e:
-        print(e)
-        createLogFile(manager, e)
+                "El formato de la linea es incorrecto")
+    except Exception as error:
+        createLogFile(manager, error, error.__traceback__, line)
         return None
 
 
@@ -21,18 +20,16 @@ def validateFileEntry(name, rawContent,  manager):
     try:
         file = FileEntry(name, rawContent, manager.getPath())
         return file
-    except Exception as e:
-        print(e)
-        createLogFile(manager, e)
+    except Exception as error:
+        createLogFile(manager, error, error.__traceback__, name)
         return None
 
 
 def validateFileElement(element, manager):
     try:
         number = Number(element)
-    except Exception as e:
-        print(e)
-        createLogFile(manager, e)
+    except Exception as error:
+        createLogFile(manager, error, error.__traceback__, element)
         return Number(element, False)
     return number
 
@@ -42,13 +39,10 @@ def validateSourceFileName(name, manager):
         if containsArray(name, "_"):
             nameAttributes = name.rstrip(".bin").split("_")
             if len(nameAttributes) != 3:
-                raise Exception(
-                    f"SourceFileName-Error: El nombre del archivo fuente es incorrecto: {name}")
+                raise Exception("El nombre del archivo fuente es incorrecto")
             return name
         else:
-            raise Exception(
-                f"SourceFileName-Error: El nombre del archivo fuente es incorrecto: {name}")
-    except Exception as e:
-        print(e)
-        createLogFile(manager, e)
+            raise Exception("El nombre del archivo fuente es incorrecto")
+    except Exception as error:
+        createLogFile(manager, error, error.__traceback__, name)
         return None
