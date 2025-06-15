@@ -1,6 +1,7 @@
 import os
 import numpy as np
 from helpers.arrays import appendArray
+from proccess.errors import createLogFile
 
 
 class FileManager:
@@ -21,8 +22,8 @@ class FileManager:
         try:
             file = open(filePath, "rb")
             return file
-        except FileNotFoundError as e:
-            print(f"Manage-Error: El archivo no existe: {e}")
+        except FileNotFoundError as error:
+            createLogFile(self, error, error.__traceback__, filePath)
             return None
 
     def listFiles(self):
@@ -41,8 +42,8 @@ class FileManager:
         try:
             file = open(filePath, "a")
             file.write(content)
-        except FileNotFoundError as e:
-            print(f"Manage-Error: El archivo no existe: {e}")
+        except FileNotFoundError as error:
+            createLogFile(self, error, error.__traceback__, filePath)
 
     def __utilPath(self, path):
         if not os.path.exists(path):
