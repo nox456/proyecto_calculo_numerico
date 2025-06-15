@@ -22,3 +22,40 @@ def setSystems(numbers, systemManager, manager):
             systems = validatePossibleSystems(systemManager, number.getValue(), manager)
             if systems is not None:
                 number.setSystems(systems)
+
+
+def toDecimal(number):
+    if number is None:
+        return None
+    value = 0
+    hexDict = {
+        "0": "0",
+        "1": "1",
+        "2": "2",
+        "3": "3",
+        "4": "4",
+        "5": "5",
+        "6": "6",
+        "7": "7",
+        "8": "8",
+        "9": "9",
+        "a": "10",
+        "b": "11",
+        "c": "12",
+        "d": "13",
+        "e": "14",
+        "f": "15"
+    }
+    if "Decimal" in number.getSystems():
+        value = int(number.getValue())
+    elif "Hexadecimal" in number.getSystems() and "Binario" not in number.getSystems():
+        for i in range(len(str(number.getValue()))):
+            exponent = len(str(number.getValue())) - i - 1
+            n = int(hexDict[str(number.getValue())[i].lower()])
+            value += n * 16 ** exponent
+    elif "Binario" in number.getSystems():
+        for i in range(len(str(number.getValue()))):
+            exponent = len(str(number.getValue())) - i - 1
+            n = int(str(number.getValue())[i])
+            value += n * 2 ** exponent
+    return value
