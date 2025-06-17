@@ -1,75 +1,72 @@
 class SigFigures:
 
-    __isZero=True
-    __number=""
+    __isZero = True
+    __number = ""
 
-    def __init__(self, number):
-        if(self.utilNumber(number)):
-            self.__number=number
+    def __init__(self, number: str):
+        if (self.utilNumber(number)):
+            self.__number = number
         else:
             raise Exception("Manage-Error: El numero está vacio.")
 
-    #getters
-    def getNumber(self):
+    # getters
+    def getNumber(self) -> str:
         return self.__number
-    
-    #setters
-    def setNumber(self, number):
-        if(self.utilNumber(number)):
-            self.__number=number
+
+    # setters
+    def setNumber(self, number: str) -> None:
+        if (self.utilNumber(number)):
+            self.__number = number
         else:
             raise Exception("Manage-Error: El numero está vacio.")
 
-    #functions
-    def operation(self):
-        num1,num2=self.separateNumber()
-        cont, fig=self.cantFigures(num1)
-        cont2,fig2=self.cantFigures(reversed(num2))
-        cont+=cont2
-        rfig2=fig2[::-1]
-        fig+=rfig2
-        return self.mostrar(cont,fig)
+    # functions
+    def operation(self) -> str:
+        num1, num2 = self.separateNumber()
+        cont, fig = self.cantFigures(num1)
+        cont2, fig2 = self.cantFigures(reversed(num2))
+        cont += cont2
+        rfig2 = fig2[::-1]
+        fig += rfig2
+        return self.mostrar(cont, fig)
 
-    def separateNumber(self):
+    def separateNumber(self) -> tuple[str, str]:
         flag = False
-        number1=""
-        number2=""
+        number1 = ""
+        number2 = ""
         for digits in self.__number:
-            if(digits!="." and digits!="." and flag==False):
-                number1+=digits
+            if (digits != "." and digits != "." and not flag):
+                number1 += digits
             else:
-                flag=True
-            if(flag):
-                number2+=digits
+                flag = True
+            if (flag):
+                number2 += digits
         return number1, number2
-        
 
-    def cantFigures(self,num):
-        isADot=False
-        figures=""
-        cont=0
-        cantDots=0
+    def cantFigures(self, num: str) -> tuple[int, str]:
+        figures = ""
+        cont = 0
+        cantDots = 0
         for digit in num:
-            if(digit!="0" and digit!="." and digit!=","):
-                self.__isZero=False
-            if(self.__isZero==False):
-               cont+=1
-               figures+=digit
-            if(digit=="." or digit==","):
-                cantDots+=1
-                cont-=1
-            if(cantDots>=2):
-                raise Exception("Manage -Error: Doble punto decimal")
-        self.__isZero=True
+            if (digit != "0" and digit != "." and digit != ","):
+                self.__isZero = False
+            if (not self.__isZero):
+                cont += 1
+                figures += digit
+            if (digit == "." or digit == ","):
+                cantDots += 1
+                cont -= 1
+            if (cantDots >= 2):
+                raise Exception("Manage-Error: Doble punto decimal")
+        self.__isZero = True
         return cont, figures
-    
-    def mostrar(self,con,figures):
+
+    def mostrar(self, con: int, figures: str) -> str:
         return "Cantidad de cifras: "+str(con)+" Cifras en si: "+figures
 
+    # utilitaries
 
-    #utilitaries
-    def utilNumber(self, number):
-        if(number==""):
+    def utilNumber(self, number: str) -> bool:
+        if (number == ""):
             return False
         return True
-

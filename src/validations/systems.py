@@ -1,4 +1,9 @@
-def validatePossibleSystems(systemManager, value, fileManager):
+from repositories.NumericSystem import NumericSystem
+from repositories.FileManager import FileManager
+from array import ArrayType
+
+
+def validatePossibleSystems(systemManager: NumericSystem, value: str, fileManager: FileManager) -> ArrayType[str]:
     try:
         systemManager.setNumber(value)
         return systemManager.getPossibleSystems()

@@ -6,7 +6,7 @@ from repositories.SigFigures import SigFigures
 from repositories.FileManager import FileManager
 
 
-def main():
+def main() -> None:
     path = "."
     fileManager = FileManager(path)
     file = selectFile(fileManager)

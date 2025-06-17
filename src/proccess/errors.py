@@ -1,9 +1,11 @@
 from datetime import datetime
 from random import randint
 import traceback
+from typing import Any
+from repositories.FileManager import FileManager
 
 
-def createLogFile(manager, error, trace, value):
+def createLogFile(manager: FileManager, error: Exception, trace: type(Exception.__traceback__), value: Any) -> None:
     tb = traceback.extract_tb(trace)
     oldPath = manager.getPath()
     manager.setRouter("./src/storage/")

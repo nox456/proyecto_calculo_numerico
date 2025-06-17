@@ -1,4 +1,5 @@
 import numpy as np
+from array import ArrayType
 
 
 class Number:
@@ -8,31 +9,31 @@ class Number:
     __sigFigs = 0
     __ops = 0
 
-    def __init__(self, value, validate=True):
+    def __init__(self, value: str, validate: bool = True):
         self.__value = self.__utilValue(value) if validate else value
         self.__systems = np.array([])
         self.__sigFigs = 0
         self.__ops = 0
 
-    def isValid(self):
+    def isValid(self) -> bool:
         return self.__isValid
 
-    def getValue(self):
+    def getValue(self) -> str:
         return self.__value
 
-    def setSystems(self, systems):
+    def setSystems(self, systems: ArrayType[str]) -> None:
         self.__systems = systems
 
-    def getSystems(self):
+    def getSystems(self) -> ArrayType[str]:
         return self.__systems
 
-    def setFigs(self, Figs):
-        self.__sigFigs = Figs
+    def setFigs(self, figs: str) -> None:
+        self.__sigFigs = figs
 
-    def getFigs(self):
+    def getFigs(self) -> str:
         return self.__sigFigs
 
-    def __utilValue(self, value):
+    def __utilValue(self, value: str) -> str:
         chars_allowed = "0123456789ABCDEF.,"
         for char in value:
             if char.upper() not in chars_allowed:
@@ -48,7 +49,7 @@ class Number:
         self.__isValid = True
         return value
 
-    def toDecimal(self):
+    def toDecimal(self) -> int:
         if self.__value is None:
             return None
         value = 0

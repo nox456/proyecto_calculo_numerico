@@ -1,4 +1,8 @@
-def validateFigures(figuresManager, value, fileManager):
+from repositories.SigFigures import SigFigures
+from repositories.FileManager import FileManager
+
+
+def validateFigures(figuresManager: SigFigures, value: str, fileManager: FileManager) -> str:
     try:
         figuresManager.setNumber(value)
         return figuresManager.operation()

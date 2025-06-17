@@ -1,4 +1,7 @@
-def validateSelector(min, max, text, fileManager):
+from repositories.FileManager import FileManager
+
+
+def validateSelector(min: int, max: int, text: str, fileManager: FileManager) -> int:
     while True:
         try:
             value = int(input(text + "(-1) para salir: "))

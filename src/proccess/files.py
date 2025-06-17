@@ -2,9 +2,13 @@ from validations.selector import validateSelector
 from validations.files import validateSourceFileName, validateFileEntry
 import numpy as np
 import random
+from repositories.FileManager import FileManager
+from repositories.FileEntry import FileEntry
+from array import ArrayType
+from repositories.Number import Number
 
 
-def selectFile(manager):
+def selectFile(manager: FileManager) -> FileEntry:
     files = manager.listFiles()
     if len(files) == 0:
         print("No hay archivos disponibles")
@@ -27,7 +31,7 @@ def selectFile(manager):
         return file
 
 
-def createResultFile(manager, sourceFileName, numbers):
+def createResultFile(manager: FileManager, sourceFileName: str, numbers: ArrayType[Number]) -> None:
     sourceFileAttributes = np.array(sourceFileName.rstrip(".bin").split("_"))
     newSerial = random.randint(1000, 9999)
     resultFileName = f"{sourceFileAttributes[2]}_{

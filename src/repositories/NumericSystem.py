@@ -1,4 +1,5 @@
 import numpy as np
+from array import ArrayType
 
 
 class NumericSystem:
@@ -7,33 +8,33 @@ class NumericSystem:
     def __init__(self):
         self.__number = "0"
 
-    def setNumber(self, number):
+    def setNumber(self, number: str) -> None:
         if len(number) == 0:
             raise Exception("Manage-Error: Debe ingresar un numero")
         self.__number = self.__utilNumber(number)
 
-    def __isDecimal(self, number):
+    def __isDecimal(self, number: str) -> str:
         decimal_chars = "0123456789"
         for char in number:
             if char not in decimal_chars:
                 return ""
         return "Decimal"
 
-    def __isHex(self, number):
+    def __isHex(self, number: str) -> str:
         hex_chars = "0123456789ABCDEF"
         for char in number:
             if char.upper() not in hex_chars:
                 return ""
         return "Hexadecimal"
 
-    def __isBinary(self, number):
+    def __isBinary(self, number: str) -> str:
         binary_chars = "01"
         for char in number:
             if char not in binary_chars:
                 return ""
         return "Binario"
 
-    def getPossibleSystems(self):
+    def getPossibleSystems(self) -> ArrayType[str]:
         if "." in self.__number or "," in self.__number:
             separator = "." if "." in self.__number else ","
             possibleBases = np.array([None, None])
@@ -52,7 +53,7 @@ class NumericSystem:
             bases = np.array([isDecimal, isHex, isBinary])
             return bases[bases != ""]
 
-    def __utilNumber(self, number):
+    def __utilNumber(self, number: str) -> str:
         chars_allowed = "0123456789ABCDEF.,"
         for char in number:
             if char.upper() not in chars_allowed:

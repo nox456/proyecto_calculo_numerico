@@ -1,9 +1,12 @@
 from helpers.arrays import containsArray
 from repositories.Number import Number
 from repositories.FileEntry import FileEntry
+from repositories.FileManager import FileManager
+from array import ArrayType
+from typing import TextIO
 
 
-def validateFileLine(line, manager):
+def validateFileLine(line: ArrayType[str], manager: FileManager) -> ArrayType[str]:
     try:
         if containsArray(line, "#"):
             return line
@@ -16,7 +19,7 @@ def validateFileLine(line, manager):
         return None
 
 
-def validateFileEntry(name, rawContent,  manager):
+def validateFileEntry(name: str, rawContent: TextIO,  manager: FileManager) -> FileEntry:
     try:
         file = FileEntry(name, rawContent, manager.getPath())
         return file
@@ -26,7 +29,7 @@ def validateFileEntry(name, rawContent,  manager):
         return None
 
 
-def validateFileElement(element, manager):
+def validateFileElement(element: str, manager: FileManager) -> Number:
     try:
         number = Number(element)
     except Exception as error:
@@ -36,7 +39,7 @@ def validateFileElement(element, manager):
     return number
 
 
-def validateSourceFileName(name, manager):
+def validateSourceFileName(name: str, manager: FileManager) -> str:
     try:
         if containsArray(name, "_"):
             nameAttributes = name.rstrip(".bin").split("_")
