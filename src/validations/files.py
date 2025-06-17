@@ -1,6 +1,5 @@
 from helpers.arrays import containsArray
 from repositories.Number import Number
-from proccess.errors import createLogFile
 from repositories.FileEntry import FileEntry
 
 
@@ -12,6 +11,7 @@ def validateFileLine(line, manager):
             raise Exception(
                 "El formato de la linea es incorrecto")
     except Exception as error:
+        from proccess.errors import createLogFile
         createLogFile(manager, error, error.__traceback__, line)
         return None
 
@@ -21,6 +21,7 @@ def validateFileEntry(name, rawContent,  manager):
         file = FileEntry(name, rawContent, manager.getPath())
         return file
     except Exception as error:
+        from proccess.errors import createLogFile
         createLogFile(manager, error, error.__traceback__, name)
         return None
 
@@ -29,6 +30,7 @@ def validateFileElement(element, manager):
     try:
         number = Number(element)
     except Exception as error:
+        from proccess.errors import createLogFile
         createLogFile(manager, error, error.__traceback__, element)
         return Number(element, False)
     return number
@@ -44,5 +46,6 @@ def validateSourceFileName(name, manager):
         else:
             raise Exception("El nombre del archivo fuente es incorrecto")
     except Exception as error:
+        from proccess.errors import createLogFile
         createLogFile(manager, error, error.__traceback__, name)
         return None

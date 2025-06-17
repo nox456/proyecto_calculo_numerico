@@ -1,6 +1,3 @@
-from proccess.errors import createLogFile
-
-
 def validateSelector(min, max, text, fileManager):
     while True:
         try:
@@ -12,4 +9,5 @@ def validateSelector(min, max, text, fileManager):
             return value
         except Exception as error:
             print(error)
+            from proccess.errors import createLogFile
             createLogFile(fileManager, error, error.__traceback__, value)

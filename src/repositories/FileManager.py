@@ -1,7 +1,6 @@
 import os
 import numpy as np
 from helpers.arrays import appendArray
-from proccess.errors import createLogFile
 
 
 class FileManager:
@@ -23,6 +22,7 @@ class FileManager:
             file = open(filePath, "rb")
             return file
         except FileNotFoundError as error:
+            from proccess.errors import createLogFile
             createLogFile(self, error, error.__traceback__, filePath)
             return None
 
@@ -43,6 +43,7 @@ class FileManager:
             file = open(filePath, "a")
             file.write(content)
         except FileNotFoundError as error:
+            from proccess.errors import createLogFile
             createLogFile(self, error, error.__traceback__, filePath)
 
     def __utilPath(self, path):
