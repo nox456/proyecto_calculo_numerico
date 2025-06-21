@@ -7,7 +7,7 @@ from repositories.FileManager import FileManager
 
 
 def main() -> None:
-    path = "."
+    path = "./src/storage/sources/"
     fileManager = FileManager(path)
     file = selectFile(fileManager)
     if file is None:
@@ -24,7 +24,7 @@ def main() -> None:
     getSigFigs(figuresManager, numbers, fileManager)
     # TODO: initialize ElemsOps ADT
     fileManager.setRouter(
-        "./src/storage/")
+        "./src/storage/results/")
     createResultFile(fileManager, file.getName(), numbers)
 
     print("-- PROGRAMA TERMINADO --")

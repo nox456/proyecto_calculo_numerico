@@ -1,5 +1,5 @@
 from validations.selector import validateSelector
-from validations.files import validateSourceFileName, validateFileEntry
+from validations.files import validateSourceFileName, validateFileEntry, validateFormula
 import numpy as np
 import random
 from repositories.FileManager import FileManager
@@ -50,3 +50,29 @@ def createResultFile(manager: FileManager, sourceFileName: str, numbers: ArrayTy
             resultLine = f"{
                 number.getValue()} -> No pertenece a ningun sistema numerico\n"
         manager.writeFile(resultFileName, resultLine)
+
+
+def selectFormulas(manager: FileManager, isMatrix: bool) -> FileEntry:
+    manager.setRouter("./src/storage/formulas/")
+    formulas = manager.listFiles()
+    if len(formulas) == 0:
+        print("No hay formularios disponibles")
+        return []
+    print("Formularios disponibles:")
+    for i in range(len(formulas)):
+        print(f"{i + 1}. {formulas[i]}")
+    choice = validateSelector(
+        1, len(formulas), f"Elige el formulario a leer (1-{len(formulas)}): ", manager)
+    if choice == -1:
+        return []
+    else:
+        if validateSourceFileName(formulas[choice - 1], manager) is None:
+            return None
+        rawContent = manager.openFile(formulas[choice - 1])
+        if rawContent is None:
+            return None
+        name = formulas[choice - 1]
+        formula = validateFileEntry(name, rawContent, manager)
+        if validateFormula(formula.getContent()[0], manager) is None:
+            return None
+        return formula

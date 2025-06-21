@@ -1,4 +1,5 @@
 from helpers.arrays import containsArray
+from helpers.formulas import checkFormula
 from repositories.Number import Number
 from repositories.FileEntry import FileEntry
 from repositories.FileManager import FileManager
@@ -51,4 +52,14 @@ def validateSourceFileName(name: str, manager: FileManager) -> str:
     except Exception as error:
         from proccess.errors import createLogFile
         createLogFile(manager, error, error.__traceback__, name)
+        return None
+
+
+def validateFormula(formula: str, manager: FileManager) -> bool:
+    try:
+        checkFormula(formula)
+        return True
+    except Exception as error:
+        from proccess.errors import createLogFile
+        createLogFile(manager, error, error.__traceback__, formula)
         return None
