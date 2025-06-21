@@ -5,10 +5,20 @@ from repositories.Number import Number
 
 
 class Formula:
+    """Representación de una fórmula.
+
+    Attributes:
+        raw (str): Fórmula en texto plano.
+        replaced (str): Fórmula en texto plano con las variables reemplazadas.
+        result (str): Resultado de la evaluación de la fórmula.
+        isValid (bool): Indica si la fórmula es válida.
+        isMatrix (bool): Indica si la fórmula tiene matrices.
+    """
     __raw = ""
     __replaced = ""
     __result = ""
     __isValid = True
+    __isMatrix = False
 
     def __init__(self, raw: str, isMatrix: bool, isValid: bool):
         if isValid:
@@ -19,6 +29,18 @@ class Formula:
         self.__isValid = isValid
 
     def __checkFormula(self, formula: str, isMatrix: bool) -> str:
+        """Valida la fórmula.
+
+        Args:
+            formula (str): Fórmula en texto plano.
+            isMatrix (bool): Indica si la fórmula tiene matrices.
+
+        Returns:
+            str: Fórmula en texto plano con las variables reemplazadas.
+
+        Raises:
+            Exception: Si la fórmula no es válida.
+        """
         openParenthesisCount = formula.count("(")
         closeParenthesisCount = formula.count(")")
         if openParenthesisCount != closeParenthesisCount:
@@ -42,6 +64,11 @@ class Formula:
         return formula[0]
 
     def evaluateFormula(self, numberTrio: ArrayType[Number]) -> None:
+        """Reemplaza las variables de la fórmula con los valores de los números y la evalua.
+
+        Args:
+            numberTrio (ArrayType[Number]): Lista de números a evaluar.
+        """
         firstValue = numberTrio[0].toDecimal()
         secondValue = numberTrio[1].toDecimal() if len(numberTrio) > 1 else 0
         thirdValue = numberTrio[2].toDecimal() if len(numberTrio) > 2 else 0
@@ -53,10 +80,25 @@ class Formula:
         self.__result = eval(self.__replaced)
 
     def getRaw(self) -> str:
+        """Devuelve la fórmula en texto plano.
+
+        Returns:
+            str: Fórmula en texto plano.
+        """
         return self.__raw
 
     def getResult(self) -> str:
+        """Devuelve el resultado de la evaluación de la fórmula.
+
+        Returns:
+            str: Resultado de la evaluación de la fórmula.
+        """
         return self.__result
 
     def isValid(self) -> bool:
+        """Devuelve si la fórmula es válida.
+
+        Returns:
+            bool: Indica si la fórmula es válida.
+        """
         return self.__isValid
