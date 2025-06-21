@@ -27,3 +27,12 @@ class FileEntry:
 
     def getName(self) -> str:
         return self.__name
+
+    def setContentLine(self, value: str, pos: int) -> None:
+        auxContent = np.array([])
+        for i in range(len(self.__content)):
+            if self.__content[i] == value and i == pos:
+                auxContent = appendArray(auxContent, value)
+            else:
+                auxContent = appendArray(auxContent, self.__content[i])
+

@@ -16,3 +16,22 @@ def containsArray(array: ArrayType[Any], value: Any) -> bool:
         if array[i] == value:
             return True
     return False
+
+
+def splitInPairs(text: str) -> ArrayType[str]:
+    pairs = np.array([])
+    operatorsCount = 0
+    for char in text:
+        if char == "+":
+            operatorsCount += 1
+        elif char == "-":
+            operatorsCount += 1
+        elif char == "*":
+            operatorsCount += 1
+        elif char == "/":
+            operatorsCount += 1
+
+    while len(pairs) < operatorsCount:
+        pairs = appendArray(pairs, f"{text[0]}{text[1]}{text[2]}")
+        text = text[2:]
+    return pairs

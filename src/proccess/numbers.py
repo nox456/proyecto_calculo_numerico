@@ -5,7 +5,9 @@ import numpy as np
 from repositories.FileManager import FileManager
 from repositories.NumericSystem import NumericSystem
 from repositories.Number import Number
+from repositories.Formula import Formula
 from array import ArrayType
+import math
 
 
 def getNumbers(fileContent: ArrayType[str], manager: FileManager) -> ArrayType[Number]:
@@ -26,3 +28,16 @@ def setSystems(numbers: ArrayType[Number], systemManager: NumericSystem, manager
             systems = validatePossibleSystems(systemManager, number.getValue(), manager)
             if systems is not None:
                 number.setSystems(systems)
+
+
+def generateResultsFromFormulas(formulas: ArrayType[Formula], numbers: ArrayType[Number]) -> None:
+    numbersParts = getNumbersTrios(numbers)
+    for part in numbersParts:
+        for formula in formulas:
+            formula.evaluateFormula(part)
+
+
+def getNumbersTrios(numbers: ArrayType[Number]) -> ArrayType[ArrayType[Number]]:
+    allNumbers = np.array(numbers)
+    parts = np.array_split(allNumbers, math.ceil(len(numbers) / 3))
+    return parts

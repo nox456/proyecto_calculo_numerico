@@ -1,9 +1,10 @@
-from proccess.files import selectFile, createResultFile
-from proccess.numbers import getNumbers, setSystems
+from proccess.files import selectFile, createResultFile, selectFormulas, createFormulasResultFile
+from proccess.numbers import getNumbers, setSystems, generateResultsFromFormulas
 from proccess.figures import getSigFigs
 from repositories.NumericSystem import NumericSystem
 from repositories.SigFigures import SigFigures
 from repositories.FileManager import FileManager
+from helpers.formulas import checkIsMatrix, getFormulas
 
 
 def main() -> None:
@@ -11,6 +12,11 @@ def main() -> None:
     fileManager = FileManager(path)
     file = selectFile(fileManager)
     if file is None:
+        print("-- PROGRAMA TERMINADO --")
+        return
+    isMatrix = checkIsMatrix(fileManager)
+    formulaFile = selectFormulas(fileManager, isMatrix)
+    if formulaFile is None:
         print("-- PROGRAMA TERMINADO --")
         return
     content = file.getContent()
@@ -25,7 +31,11 @@ def main() -> None:
     # TODO: initialize ElemsOps ADT
     fileManager.setRouter(
         "./src/storage/results/")
+    formulaContent = formulaFile.getContent()
+    formulas = getFormulas(formulaContent, fileManager, isMatrix)
+    generateResultsFromFormulas(formulas, numbers)
     createResultFile(fileManager, file.getName(), numbers)
+    createFormulasResultFile(fileManager, formulas, formulaFile.getName())
 
     print("-- PROGRAMA TERMINADO --")
 

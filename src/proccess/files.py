@@ -1,11 +1,12 @@
 from validations.selector import validateSelector
-from validations.files import validateSourceFileName, validateFileEntry, validateFormula
+from validations.files import validateSourceFileName, validateFileEntry
 import numpy as np
 import random
 from repositories.FileManager import FileManager
 from repositories.FileEntry import FileEntry
 from array import ArrayType
 from repositories.Number import Number
+from repositories.Formula import Formula
 
 
 def selectFile(manager: FileManager) -> FileEntry:
@@ -58,7 +59,7 @@ def selectFormulas(manager: FileManager, isMatrix: bool) -> FileEntry:
     if len(formulas) == 0:
         print("No hay formularios disponibles")
         return []
-    print("Formularios disponibles:")
+    print("\nFormularios disponibles:")
     for i in range(len(formulas)):
         print(f"{i + 1}. {formulas[i]}")
     choice = validateSelector(
@@ -72,7 +73,19 @@ def selectFormulas(manager: FileManager, isMatrix: bool) -> FileEntry:
         if rawContent is None:
             return None
         name = formulas[choice - 1]
-        formula = validateFileEntry(name, rawContent, manager)
-        if validateFormula(formula.getContent()[0], manager) is None:
-            return None
-        return formula
+        formulaFile = validateFileEntry(name, rawContent, manager)
+        return formulaFile
+
+
+def createFormulasResultFile(manager: FileManager, formulas: ArrayType[Formula], sourceFileName: str) -> None:
+    sourceFileAttributes = np.array(sourceFileName.rstrip(".bin").split("_"))
+    newSerial = random.randint(1000, 9999)
+    resultFileName = f"{sourceFileAttributes[2]}_{
+        sourceFileAttributes[1]}_{newSerial}.txt"
+    for formula in formulas:
+        if not formula.isValid():
+            resultLine = f"Formula invalida -> {formula.getRaw()}\n"
+            manager.writeFile(resultFileName, resultLine)
+        else:
+            resultLine = f"{formula.getRaw()}#{formula.getResult()}\n"
+            manager.writeFile(resultFileName, resultLine)

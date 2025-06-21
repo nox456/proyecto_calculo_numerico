@@ -1,10 +1,10 @@
 from helpers.arrays import containsArray
-from helpers.formulas import checkFormula
 from repositories.Number import Number
 from repositories.FileEntry import FileEntry
 from repositories.FileManager import FileManager
 from array import ArrayType
 from typing import TextIO
+from repositories.Formula import Formula
 
 
 def validateFileLine(line: ArrayType[str], manager: FileManager) -> ArrayType[str]:
@@ -55,11 +55,12 @@ def validateSourceFileName(name: str, manager: FileManager) -> str:
         return None
 
 
-def validateFormula(formula: str, manager: FileManager) -> bool:
+def validateFormula(content: str, manager: FileManager, isMatrix: bool) -> bool:
     try:
-        checkFormula(formula)
-        return True
+        formula = Formula(content, isMatrix, True)
+        return formula
     except Exception as error:
+        print(error)
         from proccess.errors import createLogFile
-        createLogFile(manager, error, error.__traceback__, formula)
-        return None
+        createLogFile(manager, error, error.__traceback__, content)
+        return Formula(content, isMatrix, False)
