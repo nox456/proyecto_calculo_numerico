@@ -58,14 +58,14 @@ def selectFormulas(manager: FileManager, isMatrix: bool) -> FileEntry:
     formulas = manager.listFiles()
     if len(formulas) == 0:
         print("No hay formularios disponibles")
-        return []
+        return None
     print("\nFormularios disponibles:")
     for i in range(len(formulas)):
         print(f"{i + 1}. {formulas[i]}")
     choice = validateSelector(
         1, len(formulas), f"Elige el formulario a leer (1-{len(formulas)}): ", manager)
     if choice == -1:
-        return []
+        return None
     else:
         if validateSourceFileName(formulas[choice - 1], manager) is None:
             return None
