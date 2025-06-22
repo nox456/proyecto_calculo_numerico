@@ -36,43 +36,37 @@ class ElementalOperations:
     # Utilitarias
 
     def __decimalSum(self, a, b="2"):
-        carry = 0
-        result = []
+        a = int(a)
+        b = int(b)
 
-        a = a.zfill(len(b))
-        b = b.zfill(len(a))
+        current = a
+        result = a
 
-        for i in range(len(a) - 1, -1, -1):
-            total = int(a[i]) + int(b[i]) + carry
-            carry = total // 10
-            result.append(str(total % 10))
+        for _ in range(b):
+            current += 1
+            result = current
 
-        if carry:
-            result.append(str(carry))
-
-        return "".join(reversed(result))
+        return str(result)
 
     def __decimalSubs(self, a, b="2"):
-        if len(a) > len(b) or (len(a) == len(b) and a > b):
-            x, y = a, b
+        a = int(a)
+        b = int(b)
+        
+        if a >= b:
+            current = b
+            result = a
+            for _ in range(b):
+                current += 1
+                result -= 1
+            return str(a - b)
         else:
-            x, y = b, a
+            current = a
+            result = b
+            for _ in range(a):
+                current += 1
+                result -= 1
+            return str(b - a)
 
-        x = x.zfill(len(y))
-        y = y.zfill(len(x))
-        result = []
-        borrow = 0
-
-        for i in range(len(x) - 1, -1, -1):
-            diff = int(x[i]) - int(y[i]) - borrow
-            if diff < 0:
-                diff += 10
-                borrow = 1
-            else:
-                borrow = 0
-            result.append(str(diff))
-
-        return "".join(reversed(result)).lstrip("0") or "0"
 
     def __decimalMult(self, a, b="2"):
         result = "0"
@@ -366,7 +360,7 @@ class ElementalOperations:
 
     def __doOperations(self):
         self.__operations = ""
-        self.__number = self.__number.replace(",", ".")
+        self.__number = self.__number.lower().replace(",", ".")
         self.__number = self.__number.split(".")[0]
         for operation in self.__base:
             if operation == "Decimal":

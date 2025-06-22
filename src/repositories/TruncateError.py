@@ -4,8 +4,6 @@ import math
 
 class TruncateError(Error):
     __truncatedValue = 0.0
-    __x = 0.0
-    
 
     def __init__(self, value, truncatedValue):
         super().__init__(value)
@@ -20,11 +18,12 @@ class TruncateError(Error):
         self._calcError()
         return self._error
     
-    # def aproximate(self, x, n):
-    #     sum = 0.0
-    #     for i in range(n):
-    #         sum += (-1)**i * (x**(2*i)) / math.factorial((2*i))
-    #     return sum
+    def __aproximate(self, x, n):
+        sum = 0.0
+        for i in range(n):
+            sum += (-1)**i * (x**(2*i)) / math.factorial((2*i))
+        return sum
 
     def _calcError(self):
+        self.setTruncatedValue(self.__aproximate(self.__truncatedValue), 3)
         self._error = abs(self._value - self.__truncatedValue)
