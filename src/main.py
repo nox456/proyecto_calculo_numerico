@@ -21,22 +21,12 @@ def main():
     setSystems(numbers, systemManager)
     figuresManager = SigFigures("0")
     getSigFigs(figuresManager, numbers)
-    # TODO: initialize ElemsOps ADT
     fileManager.setRouter(
         "./src/storage/")
     createResultFile(fileManager, file.getName(), numbers)
 
     print("-- PROGRAMA TERMINADO --")
     setOperations(numbers, operationManager)
-    # TODO: initialize SigFigs ADT
-
-    for number in numbers:
-        if number.isValid():
-            print(f"Numero: {number.getValue()}")
-            print(f"Sistemas: {number.getSystems()}")
-            print(f"Operaciones: {number.getOperations()}")
-        else:
-            print(f"Numero invalido: {number.getValue()}")
 
 
 main()
