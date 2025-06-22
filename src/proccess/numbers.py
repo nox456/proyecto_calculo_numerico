@@ -1,6 +1,7 @@
 from helpers.arrays import appendArray
 from validations.files import validateFileLine, validateFileElement
 from validations.systems import validatePossibleSystems
+from validations.operations import validateOperations
 
 
 def getNumbers(fileContent):
@@ -21,3 +22,10 @@ def setSystems(numbers, systemManager):
             systems = validatePossibleSystems(systemManager, number.getValue())
             if systems is not None:
                 number.setSystems(systems)
+
+def setOperations(numbers, operationsManager):
+    for number in numbers:
+        if number.isValid():
+            operations = validateOperations(operationsManager, number.getValue(), number.getSystems())
+            if operations is not None:
+                number.setOperations(operations)
