@@ -9,7 +9,6 @@ def createLogFile(manager: FileManager, error: Exception, trace: type(Exception.
     tb = traceback.extract_tb(trace)
     oldPath = manager.getPath()
     manager.setRouter(".")
-
     now = datetime.now().strftime("%d/%m/%Y")
     serial = randint(1000, 9999)
     errorName = error.__class__.__name__

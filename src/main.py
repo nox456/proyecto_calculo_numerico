@@ -1,5 +1,6 @@
 from proccess.files import selectFile, createResultFile, selectFormulas, createFormulasResultFile
 from proccess.numbers import getNumbers, setSystems, generateResultsFromFormulas, setOperations
+from helpers.matrixConverter import MatrixConverter
 from proccess.figures import getSigFigs
 from repositories.NumericSystem import NumericSystem
 from repositories.SigFigures import SigFigures
@@ -30,6 +31,9 @@ def main() -> None:
     operationManager = ElementalOperations()
     figuresManager = SigFigures("0")
     getSigFigs(figuresManager, numbers, fileManager)
+    # TODO: initialize ElemsOps ADT
+    matrixCheck = MatrixConverter(fileManager)
+    matrixCheck.convert()
     fileManager.setRouter(
         "./src/storage/results/")
     formulaContent = formulaFile.getContent()
