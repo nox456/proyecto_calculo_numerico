@@ -1,3 +1,4 @@
+from helpers.matrixConverter import MatrixConverter
 from proccess.files import selectFile, createResultFile
 from proccess.numbers import getNumbers, setSystems
 from proccess.figures import getSigFigs
@@ -23,6 +24,8 @@ def main() -> None:
     figuresManager = SigFigures("0")
     getSigFigs(figuresManager, numbers, fileManager)
     # TODO: initialize ElemsOps ADT
+    matrixCheck = MatrixConverter(fileManager)
+    matrixCheck.convert()
     fileManager.setRouter(
         "./src/storage/")
     createResultFile(fileManager, file.getName(), numbers)
