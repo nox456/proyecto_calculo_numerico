@@ -1,0 +1,32 @@
+from proccess.files import selectFile, createResultFile
+from proccess.figures import getSigFigs
+from repositories.NumericSystem import NumericSystem
+from repositories.SigFigures import SigFigures
+from repositories.FileManager import FileManager
+from proccess.numbers import getNumbers, setSystems, setOperations
+from repositories.ElementalOperations import ElementalOperations
+
+
+def main():
+    path = "."
+    fileManager = FileManager(path)
+    file = selectFile(fileManager)
+    if file is None:
+        print("-- PROGRAMA TERMINADO --")
+        return
+    content = file.getContent()
+    numbers = getNumbers(content)
+    systemManager = NumericSystem()
+    operationManager = ElementalOperations()
+    setSystems(numbers, systemManager)
+    figuresManager = SigFigures("0")
+    getSigFigs(figuresManager, numbers)
+    fileManager.setRouter(
+        "./src/storage/")
+    createResultFile(fileManager, file.getName(), numbers)
+
+    print("-- PROGRAMA TERMINADO --")
+    setOperations(numbers, operationManager)
+
+
+main()
