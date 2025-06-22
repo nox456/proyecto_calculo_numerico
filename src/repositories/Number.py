@@ -16,13 +16,13 @@ class Number:
     __isValid = False
     __systems = np.array([])
     __sigFigs = 0
-    __ops = 0
+    __ops = ""
 
     def __init__(self, value: str, validate: bool = True):
         self.__value = self.__utilValue(value) if validate else value
         self.__systems = np.array([])
         self.__sigFigs = 0
-        self.__ops = 0
+        self.__ops = ""
 
     def isValid(self) -> bool:
         """Devuelve si el número es válido.
@@ -71,6 +71,11 @@ class Number:
             str: Cifras significativas del número.
         """
         return self.__sigFigs
+    def setOperations(self, operations):
+        self.__ops = operations
+
+    def getOperations(self):
+        return self.__ops
 
     def __utilValue(self, value: str) -> str:
         """Valida el valor ingresado.

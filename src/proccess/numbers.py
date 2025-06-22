@@ -8,6 +8,7 @@ from repositories.Number import Number
 from repositories.Formula import Formula
 from array import ArrayType
 import math
+from validations.operations import validateOperations
 
 
 def getNumbers(fileContent: ArrayType[str], manager: FileManager) -> ArrayType[Number]:
@@ -28,7 +29,7 @@ def setSystems(numbers: ArrayType[Number], systemManager: NumericSystem, manager
             systems = validatePossibleSystems(systemManager, number.getValue(), manager)
             if systems is not None:
                 number.setSystems(systems)
-
+                
 
 def generateResultsFromFormulas(formulas: ArrayType[Formula], numbers: ArrayType[Number]) -> None:
     numbersParts = getNumbersTrios(numbers)
@@ -41,3 +42,11 @@ def getNumbersTrios(numbers: ArrayType[Number]) -> ArrayType[ArrayType[Number]]:
     allNumbers = np.array(numbers)
     parts = np.array_split(allNumbers, math.ceil(len(numbers) / 3))
     return parts
+  
+
+def setOperations(numbers, operationsManager):
+    for number in numbers:
+        if number.isValid():
+            operations = validateOperations(operationsManager, number.getValue(), number.getSystems())
+            if operations is not None:
+                number.setOperations(operations)

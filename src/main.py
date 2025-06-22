@@ -1,10 +1,11 @@
 from proccess.files import selectFile, createResultFile, selectFormulas, createFormulasResultFile
-from proccess.numbers import getNumbers, setSystems, generateResultsFromFormulas
+from proccess.numbers import getNumbers, setSystems, generateResultsFromFormulas, setOperations
 from proccess.figures import getSigFigs
 from repositories.NumericSystem import NumericSystem
 from repositories.SigFigures import SigFigures
 from repositories.FileManager import FileManager
 from helpers.formulas import checkIsMatrix, getFormulas
+from repositories.ElementalOperations import ElementalOperations
 
 
 def main() -> None:
@@ -26,9 +27,9 @@ def main() -> None:
         return
     systemManager = NumericSystem()
     setSystems(numbers, systemManager, fileManager)
+    operationManager = ElementalOperations()
     figuresManager = SigFigures("0")
     getSigFigs(figuresManager, numbers, fileManager)
-    # TODO: initialize ElemsOps ADT
     fileManager.setRouter(
         "./src/storage/results/")
     formulaContent = formulaFile.getContent()
@@ -38,6 +39,7 @@ def main() -> None:
     createFormulasResultFile(fileManager, formulas, formulaFile.getName())
 
     print("-- PROGRAMA TERMINADO --")
+    setOperations(numbers, operationManager)
 
 
 main()
