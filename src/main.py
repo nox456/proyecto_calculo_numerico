@@ -1,11 +1,13 @@
 from proccess.files import selectFile, createResultFile, selectFormulas, createFormulasResultFile
 from proccess.numbers import getNumbers, setSystems, generateResultsFromFormulas, setOperations
+from helpers.matrixConverter import MatrixConverter
 from proccess.figures import getSigFigs
 from repositories.NumericSystem import NumericSystem
 from repositories.SigFigures import SigFigures
 from repositories.FileManager import FileManager
 from helpers.formulas import checkIsMatrix, getFormulas
 from repositories.ElementalOperations import ElementalOperations
+from repositories.GaussMatrixOp import GaussMatrixOp
 
 
 def main() -> None:
@@ -32,16 +34,16 @@ def main() -> None:
     getSigFigs(figuresManager, numbers, fileManager)
     operationManager = ElementalOperations()
     setOperations(numbers, operationManager)
-
-    fileManager.setRouter(
-        "./src/storage/results/")
-    # formulaContent = formulaFile.getContent()
-    # formulas = getFormulas(formulaContent, fileManager, isMatrix)
-    # generateResultsFromFormulas(formulas, numbers)
-
+    matrixCheck = MatrixConverter(fileManager)
+    matrices = matrixCheck.convert()
+    fileManager.setRouter("./src/storage/results/")
+    formulaContent = formulaFile.getContent()
+    formulas = getFormulas(formulaContent, fileManager, isMatrix)
+    generateResultsFromFormulas(formulas, numbers)
     createResultFile(fileManager, file.getName(), numbers)
-    # createFormulasResultFile(fileManager, formulas, formulaFile.getName())
+    createFormulasResultFile(fileManager, formulas, formulaFile.getName())
 
     print("-- PROGRAMA TERMINADO --")
+
 
 main()

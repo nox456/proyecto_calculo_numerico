@@ -52,3 +52,9 @@ class FileEntry:
             str: Nombre del archivo.
         """
         return self.__name
+    
+    def setContent(self, content):
+        self.__content = content
+
+    def setName(self, name):
+        self.__name = name
