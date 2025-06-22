@@ -7,6 +7,7 @@ from repositories.SigFigures import SigFigures
 from repositories.FileManager import FileManager
 from helpers.formulas import checkIsMatrix, getFormulas
 from repositories.ElementalOperations import ElementalOperations
+from repositories.GaussMatrixOp import GaussMatrixOp
 
 
 def main() -> None:
@@ -33,7 +34,7 @@ def main() -> None:
     getSigFigs(figuresManager, numbers, fileManager)
     # TODO: initialize ElemsOps ADT
     matrixCheck = MatrixConverter(fileManager)
-    matrixCheck.convert()
+    matrices = matrixCheck.convert()
     fileManager.setRouter(
         "./src/storage/results/")
     formulaContent = formulaFile.getContent()

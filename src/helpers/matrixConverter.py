@@ -22,17 +22,19 @@ class MatrixConverter:
         return self.manager
 
     def convert(self): 
-        input("Deberá seleccionar 2 archivos: ")
-        fileA=selectFile(self.manager)
-        fileB=selectFile(self.manager)
-        filaColumA= self.CantReg(fileA)
-        filaColumB= self.CantReg(fileB)
-        matrixA = self.createMatrix(filaColumA)
-        matrixB = self.createMatrix(filaColumB) 
-        matrixA = self.fillMatrix(fileA, matrixA,filaColumA)
-        matrixB = self.fillMatrix(fileB, matrixB,filaColumB)
-        self.printMatrix(matrixA)
-        self.printMatrix(matrixB)     
+        n=input("Cuantas matrices desea crear? ")
+        n=int(n)
+        self.manager.setRouter("./src/storage/sources/")
+        files = np.array([None for _ in range(n)])
+        filColums = np.array([None for _ in range(n)])
+        matrices = np.array([None for _ in range(n)])
+        for i in range(n):
+            files[i]=selectFile(self.manager)
+            filColums[i] = self.CantReg(files[i])
+            matrices[i] = self.createMatrix(filColums[i])
+            matrices[i] = self.fillMatrix(files[i], matrices[i],filColums[i])
+            self.printMatrix(matrices[i])
+        return matrices 
 
     def CantReg(self,file):
         filaColum = np.array([0, 0])
