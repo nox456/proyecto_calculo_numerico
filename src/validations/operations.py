@@ -1,5 +1,8 @@
+from repositories.ElementalOperations import ElementalOperations
+from array import ArrayType
 
-def validateOperations(operationManager, value, bases):
+
+def validateOperations(operationManager: ElementalOperations, value: str, bases: ArrayType[str]):
     try:
         operationManager.setNumber(value)
         operationManager.setBases(bases)
