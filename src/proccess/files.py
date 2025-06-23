@@ -56,14 +56,14 @@ def selectFormulas(manager: FileManager, isMatrix: bool) -> FileEntry:
     formulas = manager.listFiles()
     if len(formulas) == 0:
         print("No hay formularios disponibles")
-        return []
+        return None
     print("\nFormularios disponibles:")
     for i in range(len(formulas)):
         print(f"{i + 1}. {formulas[i]}")
     choice = validateSelector(
         1, len(formulas), f"Elige el formulario a leer (1-{len(formulas)}): ", manager)
     if choice == -1:
-        return []
+        return None
     else:
         if validateSourceFileName(formulas[choice - 1], manager) is None:
             return None
@@ -85,5 +85,8 @@ def createFormulasResultFile(manager: FileManager, formulas: ArrayType[Formula],
             resultLine = f"Formula invalida -> {formula.getRaw()}\n"
             manager.writeFile(resultFileName, resultLine)
         else:
-            resultLine = f"{formula.getRaw()}#{formula.getResult()}\n"
+            if formula.isMatrix():
+                resultLine = f"{formula.getRaw()}\n{formula.getResult()}\n"
+            else:
+                resultLine = f"{formula.getRaw()}#{formula.getValues()}#{formula.getResult()}\n"
             manager.writeFile(resultFileName, resultLine)

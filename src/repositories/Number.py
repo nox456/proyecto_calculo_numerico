@@ -71,10 +71,20 @@ class Number:
             str: Cifras significativas del número.
         """
         return self.__sigFigs
-    def setOperations(self, operations):
+
+    def setOperations(self, operations: str) -> None:
+        """Establece las operaciones del número.
+
+        Args:
+            operations (str): Operaciones del número.
+        """
         self.__ops = operations
 
-    def getOperations(self):
+    def getOperations(self) -> str:
+        """Devuelve las operaciones del número.
+        Returns:
+            str: Operaciones del número.
+        """
         return self.__ops
 
     def __utilValue(self, value: str) -> str:
