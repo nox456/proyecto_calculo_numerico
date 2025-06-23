@@ -1,4 +1,4 @@
-from repositories.Error import Error
+from repositories.errors.Error import Error
 import math
 
 

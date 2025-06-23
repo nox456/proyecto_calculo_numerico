@@ -1,5 +1,5 @@
-from proccess.files import selectFile, createResultFile, selectFormulas, createFormulasResultFile
-from proccess.numbers import getNumbers, setSystems, generateResultsFromFormulas, setOperations
+from proccess.files import selectFile, createResultFile, createResultMatrixFile, selectFormulas, createFormulasResultFile
+from proccess.numbers import getNumbers, setSystems, generateResultsFromFormulas, setOperations, setMatrixOperations
 from helpers.matrixConverter import MatrixConverter
 from proccess.figures import getSigFigs
 from repositories.NumericSystem import NumericSystem
@@ -7,6 +7,7 @@ from repositories.SigFigures import SigFigures
 from repositories.FileManager import FileManager
 from helpers.formulas import checkIsMatrix, getFormulas
 from repositories.ElementalOperations import ElementalOperations
+from repositories.MatrixOperations import MatrixOperations
 from repositories.GaussMatrixOp import GaussMatrixOp
 
 
@@ -34,14 +35,21 @@ def main() -> None:
     getSigFigs(figuresManager, numbers, fileManager)
     operationManager = ElementalOperations()
     setOperations(numbers, operationManager)
+
     matrixCheck = MatrixConverter(fileManager)
     matrices = matrixCheck.convert()
+
+    matrixManager = MatrixOperations()
+    setMatrixOperations(matrices, matrixManager)
+
     fileManager.setRouter("./src/storage/results/")
-    formulaContent = formulaFile.getContent()
-    formulas = getFormulas(formulaContent, fileManager, isMatrix)
-    generateResultsFromFormulas(formulas, numbers)
+    # formulaContent = formulaFile.getContent()
+    # formulas = getFormulas(formulaContent, fileManager, isMatrix)
+    # generateResultsFromFormulas(formulas, numbers)
+
     createResultFile(fileManager, file.getName(), numbers)
-    createFormulasResultFile(fileManager, formulas, formulaFile.getName())
+    createResultMatrixFile(fileManager, file.getName(), matrices, matrixManager)
+    # createFormulasResultFile(fileManager, formulas, formulaFile.getName())
 
     print("-- PROGRAMA TERMINADO --")
 

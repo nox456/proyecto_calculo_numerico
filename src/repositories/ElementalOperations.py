@@ -1,6 +1,4 @@
 import numpy as np
-from math import ceil
-
 
 class ElementalOperations:
 
@@ -66,7 +64,6 @@ class ElementalOperations:
                 current += 1
                 result -= 1
             return str(b - a)
-
 
     def __decimalMult(self, a, b="2"):
         result = "0"

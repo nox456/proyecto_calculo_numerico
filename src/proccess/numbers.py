@@ -42,7 +42,7 @@ def getNumbersTrios(numbers: ArrayType[Number]) -> ArrayType[ArrayType[Number]]:
     allNumbers = np.array(numbers)
     parts = np.array_split(allNumbers, math.ceil(len(numbers) / 3))
     return parts
-  
+
 
 def setOperations(numbers, operationsManager):
     for number in numbers:
@@ -50,3 +50,7 @@ def setOperations(numbers, operationsManager):
             operations = validateOperations(operationsManager, number.getValue(), number.getSystems())
             if operations is not None:
                 number.setOperations(operations)
+
+def setMatrixOperations(matrices, matrixOperationManager):
+    for matrix in matrices:
+        matrixOperationManager.doOperations(matrix)

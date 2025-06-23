@@ -1,4 +1,4 @@
-from repositories.AbsoluteError import AbsoluteError
+from repositories.errors.AbsoluteError import AbsoluteError
 
 
 class RelativeError(AbsoluteError):
