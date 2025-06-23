@@ -32,11 +32,15 @@ def setSystems(numbers: ArrayType[Number], systemManager: NumericSystem, manager
                 number.setSystems(systems)
 
 
-def generateResultsFromFormulas(formulas: ArrayType[Formula], numbers: ArrayType[Number]) -> None:
-    numbersParts = getNumbersTrios(numbers)
-    for part in numbersParts:
+def generateResultsFromFormulas(formulas: ArrayType[Formula], numbers: ArrayType[Number], matrices: ArrayType[ArrayType[ArrayType[int]]]) -> None:
+    if numbers is not None:
+        numbersParts = getNumbersTrios(numbers)
+        for part in numbersParts:
+            for formula in formulas:
+                formula.evaluateNumbersFormula(part)
+    if matrices is not None:
         for formula in formulas:
-            formula.evaluateFormula(part)
+            formula.evaluateMatrixFormula(matrices)
 
 
 def getNumbersTrios(numbers: ArrayType[Number]) -> ArrayType[ArrayType[Number]]:

@@ -27,6 +27,7 @@ class Formula:
         else:
             self.__raw = raw
         self.__isValid = isValid
+        self.__isMatrix = isMatrix
 
     def __checkFormula(self, formula: str, isMatrix: bool) -> str:
         """Valida la fórmula.
@@ -63,7 +64,7 @@ class Formula:
             return pairs[0][0]
         return formula[0]
 
-    def evaluateFormula(self, numberTrio: ArrayType[Number]) -> None:
+    def evaluateNumbersFormula(self, numberTrio: ArrayType[Number]) -> None:
         """Reemplaza las variables de la fórmula con los valores de los números y la evalua.
 
         Args:
@@ -77,6 +78,20 @@ class Formula:
             "b", str(secondValue))
         self.__replaced = self.__replaced.lower().replace(
             "c", str(thirdValue))
+        self.__result = eval(self.__replaced)
+
+    def evaluateMatrixFormula(self, matrices: ArrayType[ArrayType[ArrayType[int]]]) -> None:
+        """Reemplaza las variables de la fórmula con las matrices.
+
+        Args:
+            matrices (ArrayType[ArrayType[ArrayType[int]]]): Matrices a evaluar.
+        """
+        self.__replaced = self.__raw.replace("A", "matrices[0]")
+        self.__replaced = self.__replaced.replace(
+            "B", "matrices[1] if len(matrices) > 1 else np.array([])")
+        self.__replaced = self.__replaced.replace(
+            "C", "matrices[2] if len(matrices) > 2 else np.array([])")
+        self.__replaced = self.__replaced.replace("*", "@")
         self.__result = eval(self.__replaced)
 
     def getRaw(self) -> str:
@@ -102,3 +117,11 @@ class Formula:
             bool: Indica si la fórmula es válida.
         """
         return self.__isValid
+
+    def isMatrix(self) -> bool:
+        """Devuelve si la fórmula es una matriz.
+
+        Returns:
+            bool: Indica si la fórmula es una matriz.
+        """
+        return self.__isMatrix

@@ -45,7 +45,7 @@ def createResultFile(manager: FileManager, sourceFileName: str, numbers: ArrayTy
                 joinedSystems = f"{joinedSystems},{system}"
 
             resultLine = f"{number.getValue()}#{joinedSystems[1:]}#{
-                number.getFigs()}\n"
+                number.getFigs()}#{number.getOperations()}\n"
         else:
             resultLine = f"{
                 number.getValue()} -> No pertenece a ningun sistema numerico\n"
@@ -86,5 +86,8 @@ def createFormulasResultFile(manager: FileManager, formulas: ArrayType[Formula],
             resultLine = f"Formula invalida -> {formula.getRaw()}\n"
             manager.writeFile(resultFileName, resultLine)
         else:
-            resultLine = f"{formula.getRaw()}#{formula.getResult()}\n"
+            if formula.isMatrix():
+                resultLine = f"{formula.getRaw()}\n{formula.getResult()}\n"
+            else:
+                resultLine = f"{formula.getRaw()}#{formula.getResult()}\n"
             manager.writeFile(resultFileName, resultLine)

@@ -475,13 +475,17 @@ class ElementalOperations:
             str: Operaciones a realizar.
         """
         op += " dec:"
-        n = self.__decimalSum(self.__number)
+        if self.__number == "0":
+            n = self.__decimalSum(self.__number)
         op += "+;"
-        n = self.__decimalSubs(self.__number)
+        if self.__number == "0":
+            n = self.__decimalSubs(self.__number)
         op += "-;"
-        n = self.__decimalMult(self.__number)
+        if self.__number == "0":
+            n = self.__decimalMult(self.__number)
         op += "*;"
-        n = self.__decimalDiv(self.__number)
+        if self.__number == "0":
+            n = self.__decimalDiv(self.__number)
         op += "/;"
         return op
 
@@ -495,13 +499,17 @@ class ElementalOperations:
             str: Operaciones a realizar.
         """
         op += " bin:"
-        n = self.__binarySum(self.__number)
+        if self.__number == "0":
+            n = self.__binarySum(self.__number)
         op += "+;"
-        n = self.__binarySubs(self.__number)
+        if self.__number == "0":
+            n = self.__binarySubs(self.__number)
         op += "-;"
-        n = self.__binaryMult(self.__number)
+        if self.__number == "0":
+            n = self.__binaryMult(self.__number)
         op += "*;"
-        n, m = self.__binaryDiv(self.__number)
+        if self.__number == "0":
+            n, m = self.__binaryDiv(self.__number)
         op += "/;"
         return op
 
@@ -515,21 +523,25 @@ class ElementalOperations:
             str: Operaciones a realizar.
         """
         op += " hex:"
-        n = self.__hexSum(self.__number)
+        if self.__number == "0":
+            n = self.__hexSum(self.__number)
         op += "+;"
-        n = self.__hexSubs(self.__number)
+        if self.__number == "0":
+            n = self.__hexSubs(self.__number)
         op += "-;"
-        n = self.__hexMult(self.__number)
+        if self.__number == "0":
+            n = self.__hexMult(self.__number)
         op += "*;"
-        n, m = self.__hexDiv(self.__number)
+        if self.__number == "0":
+            n, m = self.__hexDiv(self.__number)
         op += "/;"
         return op
 
-    def __doOperations(self):
+    def __doOperations(self) -> None:
         """Realiza las operaciones.
 
         Returns:
-            None: Ninguna.
+            None
         """
         self.__operations = ""
         self.__number = self.__number.replace(",", ".")

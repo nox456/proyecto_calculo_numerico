@@ -8,7 +8,7 @@ from repositories.Formula import Formula
 
 
 def checkIsMatrix(fileManager: FileManager) -> bool:
-    print("\nTipos de datos:")
+    print("Tipos de datos:")
     print("- 1. Matrices")
     print("- 2. Numeros")
     choice = validateSelector(1, 2, "Elija el tipo de dato a usar (1-2): ", fileManager)

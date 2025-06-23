@@ -3,40 +3,45 @@ from helpers.arrays import appendArray
 from proccess.files import selectFile
 from proccess.numbers import getNumbers, setSystems
 from repositories.NumericSystem import NumericSystem
+from repositories.FileManager import FileManager
+from repositories.FileEntry import FileEntry
+from array import ArrayType
+
 
 class MatrixConverter:
 
-    manager = None
+    __manager = None
 
-    def __init__(self, manager):
+    def __init__(self, manager: FileManager):
         if manager is None:
-            raise Exception("MatrixConverter-Error: Debe ingresar un administrador de archivos")
-        self.manager = manager
+            raise Exception(
+                "MatrixConverter-Error: Debe ingresar un administrador de archivos")
+        self.__manager = manager
 
-    def setManager(self, manager):
+    def setManager(self, manager: FileManager):
         if manager is None:
-            raise Exception("MatrixConverter-Error: Debe ingresar un administrador de archivos")
-        self.manager = manager
+            raise Exception(
+                "MatrixConverter-Error: Debe ingresar un administrador de archivos")
+        self.__manager = manager
 
-    def getManager(self):
-        return self.manager
+    def getManager(self) -> FileManager:
+        return self.__manager
 
-    def convert(self): 
-        n=input("Cuantas matrices desea crear? ")
-        n=int(n)
-        self.manager.setRouter("./src/storage/sources/")
+    def convert(self) -> ArrayType[ArrayType[ArrayType[int]]]:
+        n = input("Cuantas matrices desea crear? ")
+        n = int(n)
+        self.__manager.setRouter("./src/storage/sources/")
         files = np.array([None for _ in range(n)])
         filColums = np.array([None for _ in range(n)])
         matrices = np.array([None for _ in range(n)])
         for i in range(n):
-            files[i]=selectFile(self.manager)
-            filColums[i] = self.CantReg(files[i])
+            files[i] = selectFile(self.__manager)
+            filColums[i] = self.cantReg(files[i])
             matrices[i] = self.createMatrix(filColums[i])
-            matrices[i] = self.fillMatrix(files[i], matrices[i],filColums[i])
-            self.printMatrix(matrices[i])
-        return matrices 
+            matrices[i] = self.fillMatrix(files[i], matrices[i], filColums[i])
+        return matrices
 
-    def CantReg(self,file):
+    def cantReg(self, file: FileEntry) -> ArrayType[int]:
         filaColum = np.array([0, 0])
         if (file == ""):
             print("Objet-file: El archivo está vacio.")
@@ -58,27 +63,22 @@ class MatrixConverter:
         filaColum[1] = cont
         return filaColum
 
-    def createMatrix(self,filaColum):
+    def createMatrix(self, filaColum: ArrayType[int]) -> ArrayType[ArrayType[int]]:
         matrix = np.zeros((filaColum[1], filaColum[0]))
         return matrix
 
-    def fillMatrix(self,file, matrix, filCol):
-        n=0
+    def fillMatrix(self, file: FileEntry, matrix: ArrayType[ArrayType[int]], filCol: ArrayType[int]) -> ArrayType[ArrayType[int]]:
+        n = 0
         content = file.getContent()
         aux = np.array([])
         for space in content:
-            aux=appendArray(aux, len(space.split("#")))
-        numbers = getNumbers(content, self.manager)
+            aux = appendArray(aux, len(space.split("#")))
+        numbers = getNumbers(content, self.__manager)
         systemManager = NumericSystem()
-        setSystems(numbers, systemManager, self.manager)
+        setSystems(numbers, systemManager, self.__manager)
         for i in range(filCol[1]):
             for j in range(aux[i]):
                 value = numbers[n].toDecimal()
                 matrix[i][j] = value
                 n += 1
         return matrix
-
-    def printMatrix(self,matrix):
-        for row in matrix:
-            print(" | ".join(str(item) for item in row))
-        print("\n")
