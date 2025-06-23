@@ -1,41 +1,79 @@
 import numpy as np
-from math import ceil
+from array import ArrayType
 
 
 class ElementalOperations:
+    """Representación de las operaciones elementales.
+
+    Attributes:
+        number (str): Número a evaluar.
+        base (ArrayType[str]): Base de las operaciones.
+        operations (str): Operaciones a realizar.
+    """
 
     __number = "0"
     __base = np.array([])
     __operations = ""
 
-    def __init__(self, number="0", base=np.array([])):
+    def __init__(self, number: str = "0", base: ArrayType[str] = np.array([])):
         if len(number) == 0:
             raise Exception("Manage-Error: El numero no puede estar vacio")
         self.__number = self.__utilNumber(number)
         self.__base = base
 
-    # Setters and Getters
-    def setNumber(self, number):
+    def setNumber(self, number: str) -> None:
+        """Establece el número.
+
+        Args:
+            number (str): Número a evaluar.
+        """
         if len(number) == 0:
             raise Exception("Manage-Error: El numero no puede estar vacio")
         self.__number = self.__utilNumber(number)
 
-    def getNumber(self):
+    def getNumber(self) -> str:
+        """Devuelve el número.
+
+        Returns:
+            str: Número a evaluar.
+        """
         return self.__number
 
-    def setBases(self, base):
+    def setBases(self, base: ArrayType[str]) -> None:
+        """Establece las bases de las operaciones.
+
+        Args:
+            base (ArrayType[str]): Base de las operaciones.
+        """
         self.__base = base
 
-    def getBases(self):
+    def getBases(self) -> ArrayType[str]:
+        """Devuelve las bases de las operaciones.
+
+        Returns:
+            ArrayType[str]: Base de las operaciones.
+        """
         return self.__base
 
-    def getOperations(self):
+    def getOperations(self) -> str:
+        """Devuelve las operaciones a realizar.
+
+        Returns:
+            str: Operaciones a realizar.
+        """
         self.__doOperations()
         return self.__operations
 
-    # Utilitarias
+    def __decimalSum(self, a: str, b: str = "2"):
+        """Suma decimales.
 
-    def __decimalSum(self, a, b="2"):
+        Args:
+            a (str): Primer número.
+            b (str, optional): Segundo número. Defaults to "2".
+
+        Returns:
+            str: Resultado de la suma.
+        """
         carry = 0
         result = []
 
@@ -52,7 +90,16 @@ class ElementalOperations:
 
         return "".join(reversed(result))
 
-    def __decimalSubs(self, a, b="2"):
+    def __decimalSubs(self, a: str, b: str = "2"):
+        """Resta decimales.
+
+        Args:
+            a (str): Primer número.
+            b (str, optional): Segundo número. Defaults to "2".
+
+        Returns:
+            str: Resultado de la resta.
+        """
         if len(a) > len(b) or (len(a) == len(b) and a > b):
             x, y = a, b
         else:
@@ -74,7 +121,16 @@ class ElementalOperations:
 
         return "".join(reversed(result)).lstrip("0") or "0"
 
-    def __decimalMult(self, a, b="2"):
+    def __decimalMult(self, a: str, b: str = "2"):
+        """Multiplica decimales.
+
+        Args:
+            a (str): Primer número.
+            b (str, optional): Segundo número. Defaults to "2".
+
+        Returns:
+            str: Resultado de la multiplicación.
+        """
         result = "0"
 
         for i, digit in enumerate(reversed(b)):
@@ -85,7 +141,16 @@ class ElementalOperations:
 
         return result
 
-    def __decimalDiv(self, a, b="2"):
+    def __decimalDiv(self, a: str, b: str = "2"):
+        """Divide decimales.
+
+        Args:
+            a (str): Primer número.
+            b (str, optional): Segundo número. Defaults to "2".
+
+        Returns:
+            str: Resultado de la división.
+        """
         a = a.lstrip("0") or "0"
         b = b.lstrip("0") or "0"
 
@@ -119,7 +184,16 @@ class ElementalOperations:
 
         return quotient.lstrip("0") or "0", remainder.lstrip("0") or "0"
 
-    def __binarySum(self, a, b="10"):
+    def __binarySum(self, a: str, b: str = "10"):
+        """Suma binarias.
+
+        Args:
+            a (str): Primer número.
+            b (str, optional): Segundo número. Defaults to "10".
+
+        Returns:
+            str: Resultado de la suma.
+        """
         max_len = max(len(a), len(b))
         a = a.zfill(max_len)
         b = b.zfill(max_len)
@@ -133,7 +207,16 @@ class ElementalOperations:
             result.append("1")
         return "".join(reversed(result))
 
-    def __binarySubs(self, a, b="10"):
+    def __binarySubs(self, a: str, b: str = "10"):
+        """Resta binarias.
+
+        Args:
+            a (str): Primer número.
+            b (str, optional): Segundo número. Defaults to "10".
+
+        Returns:
+            str: Resultado de la resta.
+        """
         a_clean = a.lstrip("0") or "0"
         b_clean = b.lstrip("0") or "0"
 
@@ -176,7 +259,16 @@ class ElementalOperations:
         result_str = "".join(reversed(result)).lstrip("0")
         return result_str if result_str else "0"
 
-    def __binaryMult(self, a, b="10"):
+    def __binaryMult(self, a: str, b: str = "10"):
+        """Multiplica binarias.
+
+        Args:
+            a (str): Primer número.
+            b (str, optional): Segundo número. Defaults to "10".
+
+        Returns:
+            str: Resultado de la multiplicación.
+        """
         result = "0"
         b_len = len(b)
 
@@ -186,7 +278,16 @@ class ElementalOperations:
 
         return result
 
-    def __binaryDiv(self, a, b="10"):
+    def __binaryDiv(self, a: str, b: str = "10"):
+        """Divide binarias.
+
+        Args:
+            a (str): Primer número.
+            b (str, optional): Segundo número. Defaults to "10".
+
+        Returns:
+            str: Resultado de la división.
+        """
         if b == "0":
             raise ValueError("Cannot divide by zero.")
 
@@ -203,7 +304,16 @@ class ElementalOperations:
 
         return quotient.lstrip("0") or "0", remainder
 
-    def __hexSum(self, a, b="2"):
+    def __hexSum(self, a: str, b: str = "2"):
+        """Suma hexadecimales.
+
+        Args:
+            a (str): Primer número.
+            b (str, optional): Segundo número. Defaults to "2".
+
+        Returns:
+            str: Resultado de la suma.
+        """
         max_len = max(len(a), len(b))
         a = a.zfill(max_len)[-max_len:]
         b = b.zfill(max_len)[-max_len:]
@@ -225,7 +335,16 @@ class ElementalOperations:
 
         return "".join(reversed(result))
 
-    def __hexSubs(self, a, b="2"):
+    def __hexSubs(self, a: str, b: str = "2"):
+        """Resta hexadecimales.
+
+        Args:
+            a (str): Primer número.
+            b (str, optional): Segundo número. Defaults to "2".
+
+        Returns:
+            str: Resultado de la resta.
+        """
         if len(a) > len(b):
             larger, smaller = a, b
         elif len(a) < len(b):
@@ -265,7 +384,16 @@ class ElementalOperations:
         result_str = "".join(reversed(result)).lstrip("0")
         return result_str if result_str else "0"
 
-    def __hexMult(self, a, b="2"):
+    def __hexMult(self, a: str, b: str = "2"):
+        """Multiplica hexadecimales.
+
+        Args:
+            a (str): Primer número.
+            b (str, optional): Segundo número. Defaults to "2".
+
+        Returns:
+            str: Resultado de la multiplicación.
+        """
         if a == "0" or b == "0":
             return "0"
 
@@ -291,7 +419,16 @@ class ElementalOperations:
 
         return result
 
-    def __hexDiv(self, a, b="2"):
+    def __hexDiv(self, a: str, b: str = "2"):
+        """Divide hexadecimales.
+
+        Args:
+            a (str): Primer número.
+            b (str, optional): Segundo número. Defaults to "2".
+
+        Returns:
+            str: Resultado de la división.
+        """
         a = a.lower().lstrip("0") or "0"
         b = b.lower().lstrip("0") or "0"
 
@@ -328,7 +465,15 @@ class ElementalOperations:
 
         return (quotient.lstrip("0") or "0", remainder.lstrip("0") or "0")
 
-    def __decimalOperations(self, op):
+    def __decimalOperations(self, op: str):
+        """Devuelve las operaciones decimales.
+
+        Args:
+            op (str): Operaciones a realizar.
+
+        Returns:
+            str: Operaciones a realizar.
+        """
         op += " dec:"
         n = self.__decimalSum(self.__number)
         op += "+;"
@@ -340,7 +485,15 @@ class ElementalOperations:
         op += "/;"
         return op
 
-    def __binaryOperations(self, op):
+    def __binaryOperations(self, op: str):
+        """Devuelve las operaciones binarias.
+
+        Args:
+            op (str): Operaciones a realizar.
+
+        Returns:
+            str: Operaciones a realizar.
+        """
         op += " bin:"
         n = self.__binarySum(self.__number)
         op += "+;"
@@ -352,7 +505,15 @@ class ElementalOperations:
         op += "/;"
         return op
 
-    def __hexOperations(self, op):
+    def __hexOperations(self, op: str):
+        """Devuelve las operaciones hexadecimales.
+
+        Args:
+            op (str): Operaciones a realizar.
+
+        Returns:
+            str: Operaciones a realizar.
+        """
         op += " hex:"
         n = self.__hexSum(self.__number)
         op += "+;"
@@ -365,6 +526,11 @@ class ElementalOperations:
         return op
 
     def __doOperations(self):
+        """Realiza las operaciones.
+
+        Returns:
+            None: Ninguna.
+        """
         self.__operations = ""
         self.__number = self.__number.replace(",", ".")
         self.__number = self.__number.split(".")[0]
@@ -383,7 +549,18 @@ class ElementalOperations:
         if len(self.__operations) == 0:
             self.__operations = "No hay operaciones disponibles"
 
-    def __utilNumber(self, number):
+    def __utilNumber(self, number: str):
+        """Valida el número ingresado.
+
+        Args:
+            number (str): Número a validar.
+
+        Returns:
+            str: Número validado.
+
+        Raises:
+            Exception: Si el número no es válido.
+        """
         chars_allowed = "0123456789ABCDEF.,"
         for char in number:
             if char.upper() not in chars_allowed:

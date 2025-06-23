@@ -7,7 +7,7 @@ from repositories.FileManager import FileManager
 from repositories.Formula import Formula
 
 
-def checkIsMatrix(fileManager):
+def checkIsMatrix(fileManager: FileManager) -> bool:
     print("\nTipos de datos:")
     print("- 1. Matrices")
     print("- 2. Numeros")

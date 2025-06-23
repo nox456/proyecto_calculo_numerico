@@ -46,7 +46,6 @@ def createResultFile(manager: FileManager, sourceFileName: str, numbers: ArrayTy
 
             resultLine = f"{number.getValue()}#{joinedSystems[1:]}#{
                 number.getFigs()}\n"
-            # TODO: add ElemsOps to resultLine
         else:
             resultLine = f"{
                 number.getValue()} -> No pertenece a ningun sistema numerico\n"
