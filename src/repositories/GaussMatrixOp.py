@@ -2,11 +2,10 @@ import numpy as np
 from helpers.arrays import appendArray
 
 class GaussMatrixOp:
-    __matrices = ""
-    __filCol = ""
+    __matrix = np.array([])
 
     def __init__(self, mat):
-        self.__matrices = mat
+        self.__matrix = mat
 
     #getters
     def setMatrix(self, matrix):
@@ -17,51 +16,35 @@ class GaussMatrixOp:
         return self.__matrix
 
     #methods
-    def defineFilCol(self, matrix):
-        i=0
-        j=0
-        for fil in matrix:
-            i+=1
-            for col in fil:
-                j+=1
-        self.__filCol=np.array([i,j])
-        print(type(self.__filCol))
-
-    def getKElement(self,n,matrix):
-        return matrix[n][n]
+    def operation(self):
+        n = self.cantMatrx()
+        matrices = np.array([])
+        for i in range(n):
+            matrices = appendArray(matrices, self.addToMatrix(self.__matrix[i]))
+        for i in range(n):
+            Ab = matrices[i]
+            Ab[i] = Ab[i] / Ab[i, i]
+            for j in range(n):
+                if i != j:
+                    Ab[j] = Ab[j] - Ab[j, i] * Ab[i]
+        return Ab[:, -1]
     
-    def convertRow(self,n,matrix):
-        value=self.getKElement(n,matrix)
-        for i in range(len(matrix[n])-1):
-            element = matrix[n][i]
-            element = element / value
-            matrix[n][i]=element
-            return matrix
+    def addToMatrix(self, matrix):
+        matrixAux = np.zeros((len(matrix), len(matrix[0]) + 1))
+        for i in range(len(matrix)):
+            for j in range(len(matrix[i])):
+                matrixAux[i][j] = matrix[i][j]
+            matrixAux[i][len(matrix[i])] = 1
+        return matrixAux
 
-    def multRow(self,n, values,matrix):
-        value = values[n][n]
-        value2 = matrix[n+1][n]
-        return value2/value
-        
-    def operateRows(self, n, matrix):
-        s=n
-        while n < len(matrix):
-            for j in range(len(matrix[n])):
-                value=self.multRow(matrix)
-                element1 = self.__matrix[s][j]
-                element2 = self.__matrix[n][j]
-                element1 *= value
-                element2 -= element1
-                matrix[n][j] = element2
-
-    def printMatrix(self,matrix):
-        for row in matrix:
-            print(" | ".join(str(item) for item in row))
-        print("\n")
-
-    def gaussJordan(self):
-        for matrix in self.__matrices:
-            for i in range(len(matrix)):
-                matrix = self.convertRow(i,matrix)
-                matrix = self.operateRows(i,matrix)
-                self.printMatrix(matrix)
+    def cantMatrx(self):
+        n=0
+        for rows in self.__matrix:
+            n+=1
+        return n
+    
+    def startOperation(self):
+        for i in range(len(self.__matrix)):
+            matrix = self.operation()
+            print("Los resultados son: ")
+            print(matrix)

@@ -1,8 +1,9 @@
 from proccess.files import selectFile, createResultFile, selectFormulas, createFormulasResultFile
 from proccess.numbers import getNumbers, setSystems, generateResultsFromFormulas, setOperations
-from helpers.matrixConverter import MatrixConverter
+from proccess.matrixConverter import convert
 from proccess.figures import getSigFigs
 from repositories.NumericSystem import NumericSystem
+from repositories.GaussMatrixOp import GaussMatrixOp
 from repositories.SigFigures import SigFigures
 from repositories.FileManager import FileManager
 from helpers.formulas import checkIsMatrix, getFormulas
@@ -33,8 +34,9 @@ def main() -> None:
     figuresManager = SigFigures("0")
     getSigFigs(figuresManager, numbers, fileManager)
     # TODO: initialize ElemsOps ADT
-    matrixCheck = MatrixConverter(fileManager)
-    matrices = matrixCheck.convert()
+    matrices = convert(fileManager)
+    matrixGauss = GaussMatrixOp(matrices)
+    matrixGauss.startOperation()
     fileManager.setRouter(
         "./src/storage/results/")
     formulaContent = formulaFile.getContent()
