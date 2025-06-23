@@ -5,6 +5,7 @@ from validations.selector import validateSelector
 from validations.files import validateFormula
 from repositories.FileManager import FileManager
 from repositories.Formula import Formula
+import math
 
 
 def checkIsMatrix(fileManager: FileManager) -> bool:
@@ -15,9 +16,10 @@ def checkIsMatrix(fileManager: FileManager) -> bool:
     return True if choice == 1 else False
 
 
-def getFormulas(fileContent: ArrayType[str], manager: FileManager, isMatrix: bool) -> ArrayType[Formula]:
+def getFormulas(fileContent: ArrayType[str], manager: FileManager, isMatrix: bool, triosCount: int) -> ArrayType[Formula]:
     formulas = np.array([])
     for i in range(len(fileContent)):
-        formula = validateFormula(fileContent[i], manager, isMatrix)
-        formulas = appendArray(formulas, formula)
+        for j in range(math.ceil(triosCount / 3)):
+            formula = validateFormula(fileContent[i], manager, isMatrix)
+            formulas = appendArray(formulas, formula)
     return formulas

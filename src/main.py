@@ -54,7 +54,8 @@ def main() -> None:
 
     formulaContent = formulaFile.getContent()
 
-    formulas = getFormulas(formulaContent, fileManager, isMatrix)
+    formulas = getFormulas(formulaContent, fileManager, isMatrix,
+                           len(numbers if numbers is not None else matrices))
 
     generateResultsFromFormulas(formulas, numbers, matrices)
 

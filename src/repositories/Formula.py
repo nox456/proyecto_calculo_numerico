@@ -2,6 +2,9 @@ import numpy as np
 from helpers.arrays import splitInPairs
 from array import ArrayType
 from repositories.Number import Number
+from helpers.matrices import sumaMatrices, multiMatrices, divideMatrices, restaMatrices
+
+alpha = "DEFGHIJKLMNOPQRSTUVWXYZ"
 
 
 class Formula:
@@ -9,16 +12,16 @@ class Formula:
 
     Attributes:
         raw (str): Fórmula en texto plano.
-        replaced (str): Fórmula en texto plano con las variables reemplazadas.
         result (str): Resultado de la evaluación de la fórmula.
         isValid (bool): Indica si la fórmula es válida.
         isMatrix (bool): Indica si la fórmula tiene matrices.
+        values (dict): Valores iniciales que tomaran las variables de la formula
     """
     __raw = ""
-    __replaced = ""
     __result = ""
     __isValid = True
     __isMatrix = False
+    __values = {}
 
     def __init__(self, raw: str, isMatrix: bool, isValid: bool):
         if isValid:
@@ -73,12 +76,10 @@ class Formula:
         firstValue = numberTrio[0].toDecimal()
         secondValue = numberTrio[1].toDecimal() if len(numberTrio) > 1 else 0
         thirdValue = numberTrio[2].toDecimal() if len(numberTrio) > 2 else 0
-        self.__replaced = self.__raw.lower().replace("a", str(firstValue))
-        self.__replaced = self.__replaced.lower().lower().replace(
-            "b", str(secondValue))
-        self.__replaced = self.__replaced.lower().replace(
-            "c", str(thirdValue))
-        self.__result = eval(self.__replaced)
+        results = {"A": firstValue, "B": secondValue, "C": thirdValue}
+        self.__values = {"A": firstValue, "B": secondValue, "C": thirdValue}
+        letter = alpha[self.parseFormula(self.__raw, results) - 1]
+        self.__result = results[letter]
 
     def evaluateMatrixFormula(self, matrices: ArrayType[ArrayType[ArrayType[int]]]) -> None:
         """Reemplaza las variables de la fórmula con las matrices.
@@ -86,13 +87,13 @@ class Formula:
         Args:
             matrices (ArrayType[ArrayType[ArrayType[int]]]): Matrices a evaluar.
         """
-        self.__replaced = self.__raw.replace("A", "matrices[0]")
-        self.__replaced = self.__replaced.replace(
-            "B", "matrices[1] if len(matrices) > 1 else np.array([])")
-        self.__replaced = self.__replaced.replace(
-            "C", "matrices[2] if len(matrices) > 2 else np.array([])")
-        self.__replaced = self.__replaced.replace("*", "@")
-        self.__result = eval(self.__replaced)
+        firstMatrix = matrices[0]
+        secondMatrix = matrices[1] if len(matrices) > 1 else np.array([])
+        thirdMatrix = matrices[2] if len(matrices) > 2 else np.array([])
+        results = {"A": firstMatrix, "B": secondMatrix, "C": thirdMatrix}
+        self.__values = {"A": firstMatrix, "B": secondMatrix, "C": thirdMatrix}
+        letter = alpha[self.parseFormula(self.__raw, results) - 1]
+        self.__result = self.__formatMatrix(results[letter])
 
     def getRaw(self) -> str:
         """Devuelve la fórmula en texto plano.
@@ -125,3 +126,108 @@ class Formula:
             bool: Indica si la fórmula es una matriz.
         """
         return self.__isMatrix
+
+    def parseFormula(self, formula: str, results: dict[str, str | ArrayType[ArrayType[int]]], resultsCount: int = 0) -> int:
+        """Calcula el resultado de la formula a partir de la variables
+
+        Args:
+            formula (str): La formula original
+            results (dict): Diccionario con los valores de las variables iniciales y calculadas
+            resultsCount (int): Contador para llevar la cantidad de variables calculadas de la formula
+
+        Returns:
+            int: La posicion del resultado final de la formula
+        """
+        while "(" in formula and ")" in formula:
+            formula, resultsCount = self.__calcParenthesis(formula, results, resultsCount)
+        for operator in np.array(["*", "/", "+", "-"]):
+            while formula.find(operator) != -1:
+                n = formula.find(operator)
+                op1 = None
+                op2 = None
+                if formula[n - 1] in results:
+                    if not self.__isMatrix:
+                        op1 = float(results[formula[n - 1]])
+                    else:
+                        op1 = results[formula[n - 1]]
+                else:
+                    op1 = float(formula[n - 1])
+
+                if formula[n + 1] in results:
+                    if not self.__isMatrix:
+                        op2 = float(results[formula[n + 1]])
+                    else:
+                        op2 = results[formula[n + 1]]
+                else:
+                    op2 = float(formula[n + 1])
+
+                if operator == "*":
+                    if self.__isMatrix:
+                        results[alpha[resultsCount]] = multiMatrices(op1, op2)
+                    else:
+                        results[alpha[resultsCount]] = op1 * op2
+                    results[alpha[resultsCount]] = op1 * op2
+                elif operator == "/":
+                    if self.__isMatrix:
+                        results[alpha[resultsCount]] = divideMatrices(op1, op2)
+                    else:
+                        results[alpha[resultsCount]] = op1 / op2
+                elif operator == "+":
+                    if self.__isMatrix:
+                        results[alpha[resultsCount]] = sumaMatrices(op1, op2)
+                    else:
+                        results[alpha[resultsCount]] = op1 + op2
+                elif operator == "-":
+                    if self.__isMatrix:
+                        results[alpha[resultsCount]] = restaMatrices(op1, op2)
+                    else:
+                        results[alpha[resultsCount]] = op1 - op2
+                formula = formula.replace(
+                    f"{formula[n - 1]}{formula[n]}{formula[n + 1]}", alpha[resultsCount])
+                resultsCount += 1
+        return resultsCount
+
+    def getValues(self) -> dict[str, str]:
+        """Devuelve el diccionario con las variables iniciales de la formula
+
+        Returns:
+            dict: Diccionario
+        """
+        return self.__values
+
+    def __calcParenthesis(self, formula: str, results: dict[str, str], resultsCount: int) -> tuple[str, int]:
+        """Extrae el contenido de los paréntesis y los calcula
+
+        Args:
+            formula (str): La formula original
+            results (dict): Diccionario con los valores de las variables iniciales y calculadas
+            resultsCount (int): Contador para llevar la cantidad de variables calculadas de la formula
+
+        Returns:
+            tuple[str, int]: La formula sin los paréntesis y el nuevo contador de resultados
+        """
+        insideParenthesis = ""
+        for char1 in formula:
+            if char1 == "(":
+                textAux = formula[formula.find(char1) + 1:]
+                closeParenthesis = False
+                i = 0
+                while not closeParenthesis:
+                    if textAux[i] == "(":
+                        i = textAux.find(")", i + 1) + 1
+                    elif textAux[i] == ")":
+                        closeParenthesis = True
+                        insideParenthesis = textAux[:i]
+                    else:
+                        i += 1
+        resultsCount = self.parseFormula(insideParenthesis, results, resultsCount)
+        formula = formula.replace(f"({insideParenthesis})", alpha[resultsCount - 1])
+        return formula, resultsCount
+
+    def __formatMatrix(self, matrix: ArrayType[ArrayType[int]]) -> str:
+        matrixString = ""
+        for i in range(len(matrix)):
+            for j in range(len(matrix[i])):
+                matrixString = f"{matrixString}{matrix[i][j]}|"
+            matrixString = f"{matrixString}\n"
+        return matrixString

@@ -89,5 +89,5 @@ def createFormulasResultFile(manager: FileManager, formulas: ArrayType[Formula],
             if formula.isMatrix():
                 resultLine = f"{formula.getRaw()}\n{formula.getResult()}\n"
             else:
-                resultLine = f"{formula.getRaw()}#{formula.getResult()}\n"
+                resultLine = f"{formula.getRaw()}#{formula.getValues()}#{formula.getResult()}\n"
             manager.writeFile(resultFileName, resultLine)

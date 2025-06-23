@@ -35,9 +35,8 @@ def setSystems(numbers: ArrayType[Number], systemManager: NumericSystem, manager
 def generateResultsFromFormulas(formulas: ArrayType[Formula], numbers: ArrayType[Number], matrices: ArrayType[ArrayType[ArrayType[int]]]) -> None:
     if numbers is not None:
         numbersParts = getNumbersTrios(numbers)
-        for part in numbersParts:
-            for formula in formulas:
-                formula.evaluateNumbersFormula(part)
+        for i in range(len(numbersParts)):
+            formulas[i].evaluateNumbersFormula(numbersParts[i])
     if matrices is not None:
         for formula in formulas:
             formula.evaluateMatrixFormula(matrices)
