@@ -1,4 +1,4 @@
-from proccess.files import selectFile, createResultFile, selectFormulas, createFormulasResultFile
+from proccess.files import selectFiles, createResultFiles, selectFormulas, createFormulasResultFile, getFilesContent
 from proccess.numbers import getNumbers, setSystems, generateResultsFromFormulas, setOperations
 from helpers.matrixConverter import MatrixConverter
 from proccess.figures import getSigFigs
@@ -22,11 +22,11 @@ def main() -> None:
         matrixCheck = MatrixConverter(fileManager)
         matrices = matrixCheck.convert()
     else:
-        file = selectFile(fileManager)
-        if file is None:
+        files = selectFiles(fileManager)
+        if files is None or len(files) == 0:
             print("-- PROGRAMA TERMINADO --")
             return
-        content = file.getContent()
+        content = getFilesContent(files)
         numbers = getNumbers(content, fileManager)
         if len(numbers) == 0:
             print("-- PROGRAMA TERMINADO --")
@@ -44,24 +44,24 @@ def main() -> None:
         fileManager.setRouter(
             "./src/storage/results/")
 
-        createResultFile(fileManager, file.getName(), numbers)
+        createResultFiles(fileManager, files, numbers)
 
-    formulaFile = selectFormulas(fileManager, isMatrix)
+    formulasEntries = selectFormulas(fileManager, isMatrix)
 
-    if formulaFile is None:
+    if formulasEntries is None:
         print("-- PROGRAMA TERMINADO --")
         return
 
-    formulaContent = formulaFile.getContent()
+    formulaContent = getFilesContent(formulasEntries)
 
     formulas = getFormulas(formulaContent, fileManager, isMatrix,
-                           len(numbers if numbers is not None else matrices))
+                           numbers if numbers is not None else matrices)
 
     generateResultsFromFormulas(formulas, numbers, matrices)
 
     fileManager.setRouter(
         "./src/storage/results/")
-    createFormulasResultFile(fileManager, formulas, formulaFile.getName())
+    createFormulasResultFile(fileManager, formulas, formulasEntries)
 
     print("-- PROGRAMA TERMINADO --")
 

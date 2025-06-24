@@ -166,7 +166,6 @@ class Formula:
                         results[alpha[resultsCount]] = multiMatrices(op1, op2)
                     else:
                         results[alpha[resultsCount]] = op1 * op2
-                    results[alpha[resultsCount]] = op1 * op2
                 elif operator == "/":
                     if self.__isMatrix:
                         results[alpha[resultsCount]] = divideMatrices(op1, op2)
