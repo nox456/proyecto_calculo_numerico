@@ -2,13 +2,14 @@ from proccess.files import selectFile, createResultFile, selectFormulas, createF
 from proccess.numbers import getNumbers, setSystems, generateResultsFromFormulas, setOperations
 from proccess.matrixConverter import convert
 from proccess.figures import getSigFigs
+from repositories import SeidelMatrixOp
 from repositories.NumericSystem import NumericSystem
 from repositories.GaussMatrixOp import GaussMatrixOp
 from repositories.SigFigures import SigFigures
 from repositories.FileManager import FileManager
 from helpers.formulas import checkIsMatrix, getFormulas
 from repositories.ElementalOperations import ElementalOperations
-from repositories.GaussMatrixOp import GaussMatrixOp
+from repositories.SeidelMatrixOp import SeidelMatrixOp
 
 
 def main() -> None:
@@ -34,8 +35,11 @@ def main() -> None:
     figuresManager = SigFigures("0")
     getSigFigs(figuresManager, numbers, fileManager)
     # TODO: initialize ElemsOps ADT
-    matrices = convert(fileManager)
+    aux = matrices = convert(fileManager)
     matrixGauss = GaussMatrixOp(matrices)
+    matrixGauss.startOperation()
+    matrices = aux
+    matrixGauss = SeidelMatrixOp(matrices)
     matrixGauss.startOperation()
     fileManager.setRouter(
         "./src/storage/results/")

@@ -2,10 +2,10 @@ import numpy as np
 from helpers.arrays import appendArray
 
 class GaussMatrixOp:
-    __matrix = np.array([])
+    __matrices = np.array([])
 
     def __init__(self, mat):
-        self.__matrix = mat
+        self.__matrices = mat
 
     #getters
     def setMatrix(self, matrix):
@@ -16,25 +16,25 @@ class GaussMatrixOp:
         return self.__matrix
 
     #methods
-    def operation(self):
-        n = self.cantMatrx()
-        matrices = np.array([])
+    def operation(self, matrix):
+        A = np.array(matrix, dtype=float)
+        n = len(A)
+        m = len(A[0])
         for i in range(n):
-            matrices = appendArray(matrices, self.addToMatrix(self.__matrix[i]))
-        for i in range(n):
-            Ab = matrices[i]
-            Ab[i] = Ab[i] / Ab[i, i]
+            if A[i, i] == 0:
+                raise ValueError("División por cero en la fila {}".format(i))
+            A[i] = A[i] / A[i, i]
             for j in range(n):
                 if i != j:
-                    Ab[j] = Ab[j] - Ab[j, i] * Ab[i]
-        return Ab[:, -1]
+                    A[j] = A[j] - A[j, i] * A[i]
+        return A[:, -1]
     
     def addToMatrix(self, matrix):
         matrixAux = np.zeros((len(matrix), len(matrix[0]) + 1))
         for i in range(len(matrix)):
             for j in range(len(matrix[i])):
                 matrixAux[i][j] = matrix[i][j]
-            matrixAux[i][len(matrix[i])] = 1
+            matrixAux[i][-1] = 1
         return matrixAux
 
     def cantMatrx(self):
@@ -44,7 +44,14 @@ class GaussMatrixOp:
         return n
     
     def startOperation(self):
-        for i in range(len(self.__matrix)):
-            matrix = self.operation()
-            print("Los resultados son: ")
+        for matrix in self.__matrices:
+            matrix = self.addToMatrix(matrix)
             print(matrix)
+            np.set_printoptions(
+            suppress=True,
+            precision=3,
+            floatmode='fixed'
+            )
+            result = self.operation(matrix)
+            print("Los resultados: ")
+            print(result)
