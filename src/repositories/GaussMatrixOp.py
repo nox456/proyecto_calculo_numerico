@@ -5,15 +5,23 @@ class GaussMatrixOp:
     __matrices = np.array([])
 
     def __init__(self, mat):
-        self.__matrices = mat
+        if len(mat) == 0:
+            print("Error: No hay matrices")
+        else:
+            self.__matrices = mat
 
-    #getters
-    def setMatrix(self, matrix):
-        self.__matrix=matrix
-    
     #setters
+    def setMatrix(self, matrix):
+        if matrix == None:
+            print("Error: Es necesario tener las matrices")
+        if len(matrix) == 0:
+            print("Error: No hay matrices")
+        else:
+            self.__matrices = matrix
+    
+    #getters
     def getMatrix(self):
-        return self.__matrix
+        return self.__matrices
 
     #methods
     def operation(self, matrix):
@@ -39,19 +47,25 @@ class GaussMatrixOp:
 
     def cantMatrx(self):
         n=0
-        for rows in self.__matrix:
+        for rows in self.__matrices:
             n+=1
         return n
+
+    def checkMatrix(self, matrix):
+        if not isinstance(matrix, (np.ndarray)):
+            raise ValueError("La matriz debe ser un arreglo de NumPy.")
+        if len(matrix) != len(matrix[0]):
+            return "Al no ser una matriz cuadrada, tendra o infinitas soluciones o ninguna solucion"
+        return ""
     
     def startOperation(self):
         for matrix in self.__matrices:
+            result = self.checkMatrix(matrix)
+            if result != "":
+                return result
             matrix = self.addToMatrix(matrix)
-            print(matrix)
-            np.set_printoptions(
-            suppress=True,
-            precision=3,
-            floatmode='fixed'
-            )
+            np.set_printoptions(suppress=True,precision=3,floatmode='fixed')
             result = self.operation(matrix)
             print("Los resultados: ")
             print(result)
+            return result

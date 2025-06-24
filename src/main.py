@@ -10,6 +10,7 @@ from repositories.FileManager import FileManager
 from helpers.formulas import checkIsMatrix, getFormulas
 from repositories.ElementalOperations import ElementalOperations
 from repositories.SeidelMatrixOp import SeidelMatrixOp
+from validations.gaussValidations import validateJordan
 
 
 def main() -> None:
@@ -37,7 +38,7 @@ def main() -> None:
     # TODO: initialize ElemsOps ADT
     aux = matrices = convert(fileManager)
     matrixGauss = GaussMatrixOp(matrices)
-    matrixGauss.startOperation()
+    validateJordan(matrixGauss)
     matrices = aux
     matrixGauss = SeidelMatrixOp(matrices)
     matrixGauss.startOperation()
