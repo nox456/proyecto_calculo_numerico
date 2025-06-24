@@ -66,11 +66,6 @@ def setOperations(numbers: ArrayType[Number], operationsManager: ElementalOperat
                     number.setOperations(operations)
 
 
-def setMatrixOperations(matrices, matrixOperationManager):
-    for matrix in matrices:
-        matrixOperationManager.doOperations(matrix)
-
-
 def setSystems(numbers: ArrayType[ArrayType[Number]], systemManager: NumericSystem, manager: FileManager, inMatrix: bool = False) -> None:
     for fileNumbers in numbers:
         if inMatrix:
