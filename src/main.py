@@ -26,7 +26,6 @@ def main() -> None:
 
         matrixManager = MatrixOperations()
         setMatrixOperations(matrices, matrixManager)
-
         fileManager.setRouter("./src/storage/results/")
         createResultMatrixFile(fileManager, file.getName(), matrices, matrixManager)
     else:
@@ -64,6 +63,7 @@ def main() -> None:
 
     generateResultsFromFormulas(formulas, numbers, matrices)
 
+    fileManager.setRouter("./src/storage/results/")
     createFormulasResultFile(fileManager, formulas, formulaFile.getName())
 
     print("-- PROGRAMA TERMINADO --")
