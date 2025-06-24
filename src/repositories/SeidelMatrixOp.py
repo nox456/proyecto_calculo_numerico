@@ -1,6 +1,7 @@
 import numpy as np
 from helpers.arrays import appendArray
 
+
 class SeidelMatrixOp:
     __matrices = np.array([])
 
@@ -18,7 +19,7 @@ class SeidelMatrixOp:
             raise ValueError("Error: No hay matrices")
         else:
             self.__matrices = matrix
-    
+
     # Getters
     def getMatrix(self):
         return self.__matrices
@@ -31,7 +32,8 @@ class SeidelMatrixOp:
         if not self.isDominant(A):
             A_new = self.convertDominant(A)
             if A_new is None:
-                raise ValueError("No se pudo convertir la matriz a diagonalmente dominante")
+                raise ValueError(
+                    "No se pudo convertir la matriz a diagonalmente dominante")
             else:
                 A = A_new
         for iteration in range(max_iter):
@@ -49,7 +51,7 @@ class SeidelMatrixOp:
                 break
         return x
 
-    def isDominant(self,matrix):
+    def isDominant(self, matrix):
         n = len(matrix)
         for i in range(n):
             diag = abs(matrix[i][i])
@@ -58,14 +60,14 @@ class SeidelMatrixOp:
                     if diag < abs(matrix[i][j]) or diag < abs(matrix[j][i]):
                         return False
         return True
-    
+
     import numpy as np
 
     def convertDominant(self, matrix):
         n = len(matrix)
         for i in range(n):
-            maxVal = -1  
-            maxIndex = i  
+            maxVal = -1
+            maxIndex = i
             for j in range(n):
                 currentAbs = abs(matrix[i][j])
                 if currentAbs > maxVal:
@@ -74,9 +76,10 @@ class SeidelMatrixOp:
             if maxIndex != i:
                 matrix[[i, maxIndex]] = matrix[[maxIndex, i]]
         if not self.isDominant(matrix):
-            raise ValueError(f"La matriz no es diagonalmente dominante después de reordenar.")
+            raise ValueError(
+                f"La matriz no es diagonalmente dominante después de reordenar.")
         return matrix
-    
+
     def addToMatrix(self, matrix):
         matrixAux = np.zeros((len(matrix), len(matrix[0]) + 1))
         for i in range(len(matrix)):
@@ -94,7 +97,7 @@ class SeidelMatrixOp:
         if len(matrix) != len(matrix[0]):
             return "Al no ser una matriz cuadrada, tendrá o infinitas soluciones o ninguna solución"
         return ""
-    
+
     def startOperation(self):
         for matrix in self.__matrices:
             result = self.checkMatrix(matrix)

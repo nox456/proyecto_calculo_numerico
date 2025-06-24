@@ -13,7 +13,7 @@ def convert(manager):
     for i in range(len(files)):
         filColums[i] = cantReg(files[i])
         matrices[i] = createMatrix(filColums[i])
-    fillMatrix(files, matrices, filColums)
+    fillMatrix(files, matrices, filColums, manager)
     return matrices
 
 
@@ -41,7 +41,7 @@ def cantReg(file):
 
 
 def createMatrix(filaColum: ArrayType[int]) -> ArrayType[ArrayType[int]]:
-    matrix = [[0 for _ in range(filaColum[0])] for _ in range(filaColum[1])]
+    matrix = np.array([np.array([0 for _ in range(filaColum[0])]) for _ in range(filaColum[1])])
     return matrix
 
 
