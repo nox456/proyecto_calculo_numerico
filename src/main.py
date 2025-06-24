@@ -1,5 +1,5 @@
-from proccess.files import selectFile, createResultFile, selectFormulas, createFormulasResultFile
-from proccess.numbers import getNumbers, setSystems, generateResultsFromFormulas, setOperations
+from proccess.files import selectFile, createResultFile, createResultMatrixFile, selectFormulas, createFormulasResultFile
+from proccess.numbers import getNumbers, setSystems, generateResultsFromFormulas, setOperations, setMatrixOperations
 from helpers.matrixConverter import MatrixConverter
 from proccess.figures import getSigFigs
 from repositories.NumericSystem import NumericSystem
@@ -7,6 +7,8 @@ from repositories.SigFigures import SigFigures
 from repositories.FileManager import FileManager
 from helpers.formulas import checkIsMatrix, getFormulas
 from repositories.ElementalOperations import ElementalOperations
+from repositories.MatrixOperations import MatrixOperations
+from repositories.GaussMatrixOp import GaussMatrixOp
 
 
 def main() -> None:
@@ -21,6 +23,12 @@ def main() -> None:
     if isMatrix:
         matrixCheck = MatrixConverter(fileManager)
         matrices = matrixCheck.convert()
+
+        matrixManager = MatrixOperations()
+        setMatrixOperations(matrices, matrixManager)
+
+        fileManager.setRouter("./src/storage/results/")
+        createResultMatrixFile(fileManager, file.getName(), matrices, matrixManager)
     else:
         file = selectFile(fileManager)
         if file is None:
@@ -41,9 +49,7 @@ def main() -> None:
         operationManager = ElementalOperations()
         setOperations(numbers, operationManager)
 
-        fileManager.setRouter(
-            "./src/storage/results/")
-
+        fileManager.setRouter("./src/storage/results/")
         createResultFile(fileManager, file.getName(), numbers)
 
     formulaFile = selectFormulas(fileManager, isMatrix)
@@ -58,8 +64,6 @@ def main() -> None:
 
     generateResultsFromFormulas(formulas, numbers, matrices)
 
-    fileManager.setRouter(
-        "./src/storage/results/")
     createFormulasResultFile(fileManager, formulas, formulaFile.getName())
 
     print("-- PROGRAMA TERMINADO --")

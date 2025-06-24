@@ -55,3 +55,8 @@ def setOperations(numbers: ArrayType[Number], operationsManager: ElementalOperat
                 operationsManager, number.getValue(), number.getSystems())
             if operations is not None:
                 number.setOperations(operations)
+
+
+def setMatrixOperations(matrices, matrixOperationManager):
+    for matrix in matrices:
+        matrixOperationManager.doOperations(matrix)

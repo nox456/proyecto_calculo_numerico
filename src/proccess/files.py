@@ -7,7 +7,7 @@ from repositories.FileEntry import FileEntry
 from array import ArrayType
 from repositories.Number import Number
 from repositories.Formula import Formula
-
+from proccess.numbers import setMatrixOperations
 
 def selectFile(manager: FileManager) -> FileEntry:
     files = manager.listFiles()
@@ -50,6 +50,21 @@ def createResultFile(manager: FileManager, sourceFileName: str, numbers: ArrayTy
                 number.getValue()} -> No pertenece a ningun sistema numerico\n"
         manager.writeFile(resultFileName, resultLine)
 
+def createResultMatrixFile(manager: FileManager, sourceFileName: str, matrices, matrixManager):
+    sourceFileAttributes = np.array(sourceFileName.rstrip(".bin").split("_"))
+    newSerial = random.randint(1000, 9999)
+    resultFileName = f"{sourceFileAttributes[2]}_{sourceFileAttributes[1]}_{newSerial}_matrices.txt"
+    for matrix in matrices:
+        if len(matrix) == 0:
+            resultLine = "Matriz vacia\n"
+        else:
+            resultLine = ""
+            for row in matrix:
+                rowValues = [str(num) for num in row]
+                resultLine += " | ".join(rowValues) + "\n"
+        manager.writeFile(resultFileName, resultLine)
+        manager.writeFile(resultFileName, "Operaciones: ")
+        manager.writeFile(resultFileName, matrixManager.doOperations(matrix) + "\n")
 
 def selectFormulas(manager: FileManager, isMatrix: bool) -> FileEntry:
     manager.setRouter("./src/storage/formulas/")

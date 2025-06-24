@@ -67,11 +67,6 @@ class ElementalOperations:
     def __decimalSum(self, a: str, b: str = "2"):
         """Suma decimales.
 
-
-    def __decimalSum(self, a, b="2"):
-        a = int(a)
-        b = int(b)
-
         Args:
             a (str): Primer número.
             b (str, optional): Segundo número. Defaults to "2".
@@ -79,10 +74,8 @@ class ElementalOperations:
         Returns:
             str: Resultado de la suma.
         """
-        carry = 0
-        result = []
-
-
+        a = int(a)
+        b = int(b)
         current = a
         result = a
 
@@ -103,9 +96,16 @@ class ElementalOperations:
         Returns:
             str: Resultado de la resta.
         """
-        if len(a) > len(b) or (len(a) == len(b) and a > b):
-            x, y = a, b
-
+        a = int(a)
+        b = int(b)
+        
+        if a >= b:
+            current = b
+            result = a
+            for _ in range(b):
+                current += 1
+                result -= 1
+            return str(a - b)
         else:
             current = a
             result = b
@@ -192,14 +192,14 @@ class ElementalOperations:
         a = a.zfill(max_len)
         b = b.zfill(max_len)
         carry = 0
-        result = []
+        result = ""
         for i in range(max_len - 1, -1, -1):
             total = carry + (1 if a[i] == "1" else 0) + (1 if b[i] == "1" else 0)
-            result.append("1" if total % 2 == 1 else "0")
+            result = ("1" if total % 2 == 1 else "0") + result
             carry = total // 2
         if carry:
-            result.append("1")
-        return "".join(reversed(result))
+            result = "1" + result
+        return result
 
     def __binarySubs(self, a: str, b: str = "10"):
         """Resta binarias.
@@ -233,7 +233,7 @@ class ElementalOperations:
         larger = larger.zfill(max_len)
         smaller = smaller.zfill(max_len)
 
-        result = []
+        result = ""
         borrow = 0
 
         for i in range(max_len - 1, -1, -1):
@@ -248,9 +248,9 @@ class ElementalOperations:
             else:
                 borrow = 0
 
-            result.append(str(diff))
+            result = str(diff) + result
 
-        result_str = "".join(reversed(result)).lstrip("0")
+        result_str = result.lstrip("0")
         return result_str if result_str else "0"
 
     def __binaryMult(self, a: str, b: str = "10"):
@@ -312,7 +312,7 @@ class ElementalOperations:
         a = a.zfill(max_len)[-max_len:]
         b = b.zfill(max_len)[-max_len:]
 
-        result = []
+        result = ""
         carry = 0
         hex_digits = "0123456789abcdef"
 
@@ -322,12 +322,12 @@ class ElementalOperations:
 
             total = digit_a + digit_b + carry
             carry = total // 16
-            result.append(hex_digits[total % 16])
+            result = hex_digits[total % 16] + result
 
         if carry:
-            result.append(hex_digits[carry])
+            result = hex_digits[carry] + result
 
-        return "".join(reversed(result))
+        return result
 
     def __hexSubs(self, a: str, b: str = "2"):
         """Resta hexadecimales.
@@ -357,7 +357,7 @@ class ElementalOperations:
         max_len = max(len(larger), len(smaller))
         larger = larger.zfill(max_len)
         smaller = smaller.zfill(max_len)
-        result = []
+        result = ""
         borrow = 0
         hex_digits = "0123456789abcdef"
 
@@ -373,9 +373,10 @@ class ElementalOperations:
                 borrow = 1
             else:
                 borrow = 0
-            result.append(hex_digits[diff])
 
-        result_str = "".join(reversed(result)).lstrip("0")
+            result = hex_digits[diff] + result
+
+        result_str = result.lstrip("0")
         return result_str if result_str else "0"
 
     def __hexMult(self, a: str, b: str = "2"):
@@ -469,17 +470,13 @@ class ElementalOperations:
             str: Operaciones a realizar.
         """
         op += " dec:"
-        if self.__number == "0":
-            n = self.__decimalSum(self.__number)
+        n = self.__decimalSum(self.__number)
         op += "+;"
-        if self.__number == "0":
-            n = self.__decimalSubs(self.__number)
+        n = self.__decimalSubs(self.__number)
         op += "-;"
-        if self.__number == "0":
-            n = self.__decimalMult(self.__number)
+        n = self.__decimalMult(self.__number)
         op += "*;"
-        if self.__number == "0":
-            n = self.__decimalDiv(self.__number)
+        n = self.__decimalDiv(self.__number)
         op += "/;"
         return op
 
@@ -493,17 +490,13 @@ class ElementalOperations:
             str: Operaciones a realizar.
         """
         op += " bin:"
-        if self.__number == "0":
-            n = self.__binarySum(self.__number)
+        n = self.__binarySum(self.__number)
         op += "+;"
-        if self.__number == "0":
-            n = self.__binarySubs(self.__number)
+        n = self.__binarySubs(self.__number)
         op += "-;"
-        if self.__number == "0":
-            n = self.__binaryMult(self.__number)
+        n = self.__binaryMult(self.__number)
         op += "*;"
-        if self.__number == "0":
-            n, m = self.__binaryDiv(self.__number)
+        n, m = self.__binaryDiv(self.__number)
         op += "/;"
         return op
 
@@ -517,17 +510,13 @@ class ElementalOperations:
             str: Operaciones a realizar.
         """
         op += " hex:"
-        if self.__number == "0":
-            n = self.__hexSum(self.__number)
+        n = self.__hexSum(self.__number)
         op += "+;"
-        if self.__number == "0":
-            n = self.__hexSubs(self.__number)
+        n = self.__hexSubs(self.__number)
         op += "-;"
-        if self.__number == "0":
-            n = self.__hexMult(self.__number)
+        n = self.__hexMult(self.__number)
         op += "*;"
-        if self.__number == "0":
-            n, m = self.__hexDiv(self.__number)
+        n, m = self.__hexDiv(self.__number)
         op += "/;"
         return op
 
