@@ -57,7 +57,7 @@ def main() -> None:
     formulas = getFormulas(formulaContent, fileManager, isMatrix,
                            numbers if numbers is not None else matrices)
 
-    generateResultsFromFormulas(formulas, numbers, matrices)
+    generateResultsFromFormulas(formulas, numbers, matrices, fileManager)
 
     fileManager.setRouter(
         "./src/storage/results/")

@@ -33,7 +33,7 @@ def getNumbers(fileContent: ArrayType[ArrayType[str]], manager: FileManager, inM
     return numbers
 
 
-def generateResultsFromFormulas(formulas: ArrayType[ArrayType[Formula]], numbers: ArrayType[ArrayType[Number]], matrices: ArrayType[ArrayType[ArrayType[int]]]) -> None:
+def generateResultsFromFormulas(formulas: ArrayType[ArrayType[Formula]], numbers: ArrayType[ArrayType[Number]], matrices: ArrayType[ArrayType[ArrayType[int]]], manager: FileManager) -> None:
     if numbers is not None:
         for i in range(len(formulas)):
             j = 0
@@ -47,7 +47,7 @@ def generateResultsFromFormulas(formulas: ArrayType[ArrayType[Formula]], numbers
         for i in range(len(formulas)):
             for j in range(len(formulas[i])):
                 for matrix in matrices:
-                    formulas[i][j].evaluateMatrixFormula(matrices)
+                    formulas[i][j].evaluateMatrixFormula(matrices, manager)
 
 
 def getNumbersTrios(numbers: ArrayType[Number]) -> ArrayType[ArrayType[Number]]:
