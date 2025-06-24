@@ -10,7 +10,7 @@ from repositories.FileManager import FileManager
 from helpers.formulas import checkIsMatrix, getFormulas
 from repositories.ElementalOperations import ElementalOperations
 from repositories.SeidelMatrixOp import SeidelMatrixOp
-from validations.gaussValidations import validateJordan
+from validations.gaussValidations import validateJordan, validateSeidel, instanceValidationJordan, instanceValidationSeidel
 
 
 def main() -> None:
@@ -37,11 +37,11 @@ def main() -> None:
     getSigFigs(figuresManager, numbers, fileManager)
     # TODO: initialize ElemsOps ADT
     aux = matrices = convert(fileManager)
-    matrixGauss = GaussMatrixOp(matrices)
-    validateJordan(matrixGauss)
+    matrixGauss = instanceValidationJordan(matrices, fileManager)
+    validateJordan(matrixGauss, fileManager)
     matrices = aux
-    matrixGauss = SeidelMatrixOp(matrices)
-    matrixGauss.startOperation()
+    matrixGauss = instanceValidationSeidel(matrices, fileManager)
+    validateSeidel(matrixGauss, fileManager)
     fileManager.setRouter(
         "./src/storage/results/")
     formulaContent = formulaFile.getContent()

@@ -6,16 +6,16 @@ class GaussMatrixOp:
 
     def __init__(self, mat):
         if len(mat) == 0:
-            print("Error: No hay matrices")
+            raise ValueError("Error: No hay matrices")
         else:
             self.__matrices = mat
 
     #setters
     def setMatrix(self, matrix):
         if matrix == None:
-            print("Error: Es necesario tener las matrices")
+            raise ValueError("Error: Es necesario tener las matrices")
         if len(matrix) == 0:
-            print("Error: No hay matrices")
+            raise ValueError("Error: No hay matrices")
         else:
             self.__matrices = matrix
     
@@ -66,6 +66,4 @@ class GaussMatrixOp:
             matrix = self.addToMatrix(matrix)
             np.set_printoptions(suppress=True,precision=3,floatmode='fixed')
             result = self.operation(matrix)
-            print("Los resultados: ")
-            print(result)
             return result
