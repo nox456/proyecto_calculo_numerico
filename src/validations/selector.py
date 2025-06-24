@@ -1,4 +1,5 @@
 from repositories.FileManager import FileManager
+from proccess.errors import createLogFile
 
 
 def validateSelector(min: int, max: int, text: str, fileManager: FileManager) -> int:
@@ -12,5 +13,16 @@ def validateSelector(min: int, max: int, text: str, fileManager: FileManager) ->
             return value
         except Exception as error:
             print(error)
-            from proccess.errors import createLogFile
             createLogFile(fileManager, error, error.__traceback__, value)
+
+def validateNumber(text) -> int:
+    while True:
+        try:
+            value = int(input(text))
+            if value == -1:
+                return -1
+            if value < min or value > max:
+                raise Exception("El valor debe estar entre los límites")
+            return value
+        except Exception as error:
+            print(error)

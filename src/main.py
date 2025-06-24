@@ -1,6 +1,6 @@
 from proccess.files import selectFiles, createResultFiles, selectFormulas, createFormulasResultFile, getFilesContent, createResultMatrixFile
 from proccess.numbers import getNumbers, setSystems, generateResultsFromFormulas, setOperations
-from helpers.matrixConverter import MatrixConverter
+from proccess.matrixConverter import convert
 from proccess.figures import getSigFigs
 from repositories.NumericSystem import NumericSystem
 from repositories.SigFigures import SigFigures
@@ -8,6 +8,7 @@ from repositories.FileManager import FileManager
 from helpers.formulas import checkIsMatrix, getFormulas
 from repositories.ElementalOperations import ElementalOperations
 from repositories.MatrixOperations import MatrixOperations
+from validations.gaussValidations import validateJordan, validateSeidel, instanceValidationJordan, instanceValidationSeidel
 
 
 def main() -> None:
@@ -20,8 +21,15 @@ def main() -> None:
     numbers = None
 
     if isMatrix:
-        matrixCheck = MatrixConverter(fileManager)
-        matrices = matrixCheck.convert()
+        aux = matrices = convert(fileManager)
+
+        matrixGauss = instanceValidationJordan(matrices, fileManager)
+        validateJordan(matrixGauss, fileManager)
+
+        matrices = aux
+
+        matrixGauss = instanceValidationSeidel(matrices, fileManager)
+        validateSeidel(matrixGauss, fileManager)
 
         matrixManager = MatrixOperations()
 
