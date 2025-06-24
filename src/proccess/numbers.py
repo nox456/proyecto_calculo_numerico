@@ -12,34 +12,42 @@ import math
 from validations.operations import validateOperations
 
 
-def getNumbers(fileContent: ArrayType[str], manager: FileManager) -> ArrayType[Number]:
+def getNumbers(fileContent: ArrayType[ArrayType[str]], manager: FileManager, inMatrix: bool = False) -> ArrayType[ArrayType[Number]]:
     numbers = np.array([])
     for i in range(len(fileContent)):
-        line = validateFileLine(fileContent[i], manager)
-        if line is not None:
-            lineNumbers = line.split("#")
-            for i in range(len(lineNumbers)):
-                number = validateFileElement(lineNumbers[i], manager)
-                numbers = appendArray(numbers, number)
+        fileNumbers = np.array([])
+        for j in range(len(fileContent[i])):
+            line = validateFileLine(fileContent[i][j], manager)
+            if line is not None:
+                lineNumbers = line.split("#")
+                numbersLines = np.array([])
+                for k in range(len(lineNumbers)):
+                    number = validateFileElement(lineNumbers[k], manager)
+                    if inMatrix:
+                        numbersLines = appendArray(numbersLines, number)
+                    else:
+                        fileNumbers = appendArray(fileNumbers, number)
+                if inMatrix:
+                    fileNumbers = appendArray(fileNumbers, numbersLines)
+        numbers = appendArray(numbers, fileNumbers)
     return numbers
 
 
-def setSystems(numbers: ArrayType[Number], systemManager: NumericSystem, manager: FileManager) -> None:
-    for number in numbers:
-        if number.isValid():
-            systems = validatePossibleSystems(systemManager, number.getValue(), manager)
-            if systems is not None:
-                number.setSystems(systems)
-
-
-def generateResultsFromFormulas(formulas: ArrayType[Formula], numbers: ArrayType[Number], matrices: ArrayType[ArrayType[ArrayType[int]]]) -> None:
+def generateResultsFromFormulas(formulas: ArrayType[ArrayType[Formula]], numbers: ArrayType[ArrayType[Number]], matrices: ArrayType[ArrayType[ArrayType[int]]], manager: FileManager) -> None:
     if numbers is not None:
-        numbersParts = getNumbersTrios(numbers)
-        for i in range(len(numbersParts)):
-            formulas[i].evaluateNumbersFormula(numbersParts[i])
+        for i in range(len(formulas)):
+            j = 0
+            while j < len(formulas[i]):
+                for k in range(len(numbers)):
+                    numbersParts = getNumbersTrios(numbers[k])
+                    for i2 in range(len(numbersParts)):
+                        formulas[i][j].evaluateNumbersFormula(numbersParts[i2])
+                        j += 1
     if matrices is not None:
-        for formula in formulas:
-            formula.evaluateMatrixFormula(matrices)
+        for i in range(len(formulas)):
+            for j in range(len(formulas[i])):
+                for matrix in matrices:
+                    formulas[i][j].evaluateMatrixFormula(matrices, manager)
 
 
 def getNumbersTrios(numbers: ArrayType[Number]) -> ArrayType[ArrayType[Number]]:
@@ -49,14 +57,34 @@ def getNumbersTrios(numbers: ArrayType[Number]) -> ArrayType[ArrayType[Number]]:
 
 
 def setOperations(numbers: ArrayType[Number], operationsManager: ElementalOperations) -> None:
-    for number in numbers:
-        if number.isValid():
-            operations = validateOperations(
-                operationsManager, number.getValue(), number.getSystems())
-            if operations is not None:
-                number.setOperations(operations)
+    for fileNumbers in numbers:
+        for number in fileNumbers:
+            if number.isValid():
+                operations = validateOperations(
+                    operationsManager, number.getValue(), number.getSystems())
+                if operations is not None:
+                    number.setOperations(operations)
 
 
 def setMatrixOperations(matrices, matrixOperationManager):
     for matrix in matrices:
         matrixOperationManager.doOperations(matrix)
+
+
+def setSystems(numbers: ArrayType[ArrayType[Number]], systemManager: NumericSystem, manager: FileManager, inMatrix: bool = False) -> None:
+    for fileNumbers in numbers:
+        if inMatrix:
+            for number in fileNumbers:
+                for i in range(len(number)):
+                    if number[i].isValid():
+                        systems = validatePossibleSystems(
+                            systemManager, number[i].getValue(), manager)
+                        if systems is not None:
+                            number[i].setSystems(systems)
+        else:
+            for number in fileNumbers:
+                if number.isValid():
+                    systems = validatePossibleSystems(
+                        systemManager, number.getValue(), manager)
+                    if systems is not None:
+                        number.setSystems(systems)

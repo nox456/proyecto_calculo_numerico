@@ -1,4 +1,4 @@
-from proccess.files import selectFile, createResultFile, createResultMatrixFile, selectFormulas, createFormulasResultFile
+from proccess.files import selectFiles, createResultFiles, selectFormulas, createFormulasResultFile, getFilesContent, createResultMatrixFile
 from proccess.numbers import getNumbers, setSystems, generateResultsFromFormulas, setOperations, setMatrixOperations
 from helpers.matrixConverter import MatrixConverter
 from proccess.figures import getSigFigs
@@ -27,13 +27,13 @@ def main() -> None:
         matrixManager = MatrixOperations()
         setMatrixOperations(matrices, matrixManager)
         fileManager.setRouter("./src/storage/results/")
-        createResultMatrixFile(fileManager, file.getName(), matrices, matrixManager)
+        createResultMatrixFile(fileManager, matrices, matrixManager)
     else:
-        file = selectFile(fileManager)
-        if file is None:
+        files = selectFiles(fileManager)
+        if files is None or len(files) == 0:
             print("-- PROGRAMA TERMINADO --")
             return
-        content = file.getContent()
+        content = getFilesContent(files)
         numbers = getNumbers(content, fileManager)
         if len(numbers) == 0:
             print("-- PROGRAMA TERMINADO --")
@@ -48,23 +48,26 @@ def main() -> None:
         operationManager = ElementalOperations()
         setOperations(numbers, operationManager)
 
-        fileManager.setRouter("./src/storage/results/")
-        createResultFile(fileManager, file.getName(), numbers)
+        fileManager.setRouter(
+            "./src/storage/results/")
 
-    formulaFile = selectFormulas(fileManager, isMatrix)
+        createResultFiles(fileManager, files, numbers)
 
-    if formulaFile is None:
+    formulasEntries = selectFormulas(fileManager, isMatrix)
+
+    if formulasEntries is None:
         print("-- PROGRAMA TERMINADO --")
         return
 
-    formulaContent = formulaFile.getContent()
+    formulaContent = getFilesContent(formulasEntries)
 
-    formulas = getFormulas(formulaContent, fileManager, isMatrix,len(numbers if numbers is not None else matrices))
+    formulas = getFormulas(formulaContent, fileManager, isMatrix,
+                           numbers if numbers is not None else matrices)
 
-    generateResultsFromFormulas(formulas, numbers, matrices)
+    generateResultsFromFormulas(formulas, numbers, matrices, fileManager)
 
     fileManager.setRouter("./src/storage/results/")
-    createFormulasResultFile(fileManager, formulas, formulaFile.getName())
+    createFormulasResultFile(fileManager, formulas, formulasEntries)
 
     print("-- PROGRAMA TERMINADO --")
 

@@ -3,6 +3,7 @@ from helpers.arrays import splitInPairs
 from array import ArrayType
 from repositories.Number import Number
 from helpers.matrices import sumaMatrices, multiMatrices, divideMatrices, restaMatrices
+from repositories.FileManager import FileManager
 
 alpha = "DEFGHIJKLMNOPQRSTUVWXYZ"
 
@@ -81,19 +82,25 @@ class Formula:
         letter = alpha[self.parseFormula(self.__raw, results) - 1]
         self.__result = results[letter]
 
-    def evaluateMatrixFormula(self, matrices: ArrayType[ArrayType[ArrayType[int]]]) -> None:
+    def evaluateMatrixFormula(self, matrices: ArrayType[ArrayType[ArrayType[int]]], manager: FileManager) -> None:
         """Reemplaza las variables de la fórmula con las matrices.
 
         Args:
             matrices (ArrayType[ArrayType[ArrayType[int]]]): Matrices a evaluar.
         """
-        firstMatrix = matrices[0]
-        secondMatrix = matrices[1] if len(matrices) > 1 else np.array([])
-        thirdMatrix = matrices[2] if len(matrices) > 2 else np.array([])
-        results = {"A": firstMatrix, "B": secondMatrix, "C": thirdMatrix}
-        self.__values = {"A": firstMatrix, "B": secondMatrix, "C": thirdMatrix}
-        letter = alpha[self.parseFormula(self.__raw, results) - 1]
-        self.__result = self.__formatMatrix(results[letter])
+        try:
+            firstMatrix = matrices[0]
+            secondMatrix = matrices[1] if len(matrices) > 1 else np.array([])
+            thirdMatrix = matrices[2] if len(matrices) > 2 else np.array([])
+            results = {"A": firstMatrix, "B": secondMatrix, "C": thirdMatrix}
+            self.__values = {"A": firstMatrix, "B": secondMatrix, "C": thirdMatrix}
+            letter = alpha[self.parseFormula(self.__raw, results) - 1]
+            self.__result = self.__formatMatrix(results[letter])
+        except Exception as error:
+            print(error)
+            from proccess.errors import createLogFile
+            createLogFile(manager, error, error.__traceback__, results)
+            return None
 
     def getRaw(self) -> str:
         """Devuelve la fórmula en texto plano.
@@ -163,23 +170,34 @@ class Formula:
 
                 if operator == "*":
                     if self.__isMatrix:
-                        results[alpha[resultsCount]] = multiMatrices(op1, op2)
+                        if len(op1) == len(op2[0]) and len(op2) == len(op1[0]):
+                            results[alpha[resultsCount]] = multiMatrices(op1, op2)
+                        else:
+                            raise Exception("Multiplicacion de matrices no válida")
                     else:
                         results[alpha[resultsCount]] = op1 * op2
-                    results[alpha[resultsCount]] = op1 * op2
                 elif operator == "/":
                     if self.__isMatrix:
-                        results[alpha[resultsCount]] = divideMatrices(op1, op2)
+                        if len(op1) == len(op2) and len(op2[0]) == len(op1[0]):
+                            results[alpha[resultsCount]] = divideMatrices(op1, op2)
+                        else:
+                            raise Exception("División de matrices no válida")
                     else:
                         results[alpha[resultsCount]] = op1 / op2
                 elif operator == "+":
                     if self.__isMatrix:
-                        results[alpha[resultsCount]] = sumaMatrices(op1, op2)
+                        if len(op1) == len(op2) and len(op2[0]) == len(op1[0]):
+                            results[alpha[resultsCount]] = sumaMatrices(op1, op2)
+                        else:
+                            raise Exception("Suma de matrices no válida")
                     else:
                         results[alpha[resultsCount]] = op1 + op2
                 elif operator == "-":
                     if self.__isMatrix:
-                        results[alpha[resultsCount]] = restaMatrices(op1, op2)
+                        if len(op1) == len(op2) and len(op2[0]) == len(op1[0]):
+                            results[alpha[resultsCount]] = restaMatrices(op1, op2)
+                        else:
+                            raise Exception("Resta de matrices no válida")
                     else:
                         results[alpha[resultsCount]] = op1 - op2
                 formula = formula.replace(
