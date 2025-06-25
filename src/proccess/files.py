@@ -56,20 +56,22 @@ def getFilesContent(files: ArrayType[FileEntry]) -> ArrayType[ArrayType[str]]:
     return content
 
 
-def createResultMatrixFile(manager: FileManager, matrices, matrixManager):
+def createResultMatrixFile(manager: FileManager, matrices, matrixManager, jordan, seidel):
     newSerial = random.randint(1000, 9999)
     resultFileName = f"matrix_2025_{newSerial}.txt"
-    for matrix in matrices:
-        if len(matrix) == 0:
+    for i  in range(len(matrices)):
+        if len(matrices[i]) == 0:
             resultLine = "Matriz vacia\n"
         else:
             resultLine = ""
-            for row in matrix:
+            for row in matrices[i]:
                 rowValues = [str(num) for num in row]
                 resultLine += " | ".join(rowValues) + "\n"
         manager.writeFile(resultFileName, resultLine)
         manager.writeFile(resultFileName, "Operaciones: ")
-        manager.writeFile(resultFileName, matrixManager.doOperations(matrix) + "\n")
+        manager.writeFile(resultFileName, matrixManager.doOperations(matrices[i]) + "\n")
+        resultLine = "Resultado por Gauss-Jordan: " + str(jordan[i]) + ".   Resultado por Gauss-Seidel: " + str(seidel[i]) + "\n"
+        manager.writeFile(resultFileName, resultLine)
 
 
 def selectFormulas(manager: FileManager, isMatrix: bool) -> ArrayType[FileEntry]:

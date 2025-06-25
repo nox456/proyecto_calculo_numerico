@@ -4,7 +4,7 @@ from repositories.SeidelMatrixOp import SeidelMatrixOp
 
 def validateJordan(matrix, manager):
     try:
-        matrix.startOperation()
+        return matrix.startOperation()
     except Exception as error:
         from proccess.errors import createLogFile
         print(error)
@@ -13,7 +13,7 @@ def validateJordan(matrix, manager):
 
 def validateSeidel(matrix, manager):
     try:
-        matrix.startOperation()
+        return matrix.startOperation()
     except Exception as error:
         from proccess.errors import createLogFile
         print(error)

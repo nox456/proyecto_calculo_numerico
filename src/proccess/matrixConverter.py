@@ -8,6 +8,8 @@ from array import ArrayType
 def convert(manager):
     manager.setRouter("./src/storage/sources/")
     files = selectFiles(manager)
+    if files is None:
+        return
     filColums = np.array([None for _ in range(len(files))])
     matrices = np.array([None for _ in range(len(files))])
     for i in range(len(files)):

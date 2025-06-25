@@ -1,5 +1,6 @@
 import numpy as np
 from helpers.arrays import appendArray
+from validations.operations import validateGaussOperation
 
 class GaussMatrixOp:
     __matrices = np.array([])
@@ -27,7 +28,6 @@ class GaussMatrixOp:
     def operation(self, matrix):
         A = np.array(matrix, dtype=float)
         n = len(A)
-        m = len(A[0])
         for i in range(n):
             if A[i, i] == 0:
                 raise ValueError("División por cero en la fila {}".format(i))
@@ -59,11 +59,13 @@ class GaussMatrixOp:
         return ""
     
     def startOperation(self):
+        results = np.array([])
         for matrix in self.__matrices:
             result = self.checkMatrix(matrix)
             if result != "":
                 return result
             matrix = self.addToMatrix(matrix)
             np.set_printoptions(suppress=True,precision=3,floatmode='fixed')
-            result = self.operation(matrix)
-            return result
+            result = validateGaussOperation(self, matrix)
+            results = appendArray(results, result)
+        return results
