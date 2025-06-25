@@ -101,10 +101,9 @@ class SeidelMatrixOp:
         results = np.array([])
         for matrix in self.__matrices:
             result = self.checkMatrix(matrix)
-            if result != "":
-                return result
             matrix = self.addToMatrix(matrix)
             np.set_printoptions(suppress=True, precision=3, floatmode='fixed')
-            result = validateGaussOperation(self, matrix)
+            if result == "":
+                result = validateGaussOperation(self, matrix)
             results = appendArray(results, result)
         return results
