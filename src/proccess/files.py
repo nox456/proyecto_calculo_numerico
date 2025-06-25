@@ -9,6 +9,7 @@ from repositories.Formula import Formula
 from helpers.arrays import appendArray
 from datetime import datetime
 from repositories.MatrixOperations import MatrixOperations
+from validations.operations import validateMatrixOperation
 
 
 def selectFiles(manager: FileManager) -> ArrayType[FileEntry]:
@@ -65,7 +66,8 @@ def createResultMatrixFile(manager: FileManager, fileName: str,  matrices, matri
                 resultLine += " | ".join(rowValues) + "\n"
         manager.writeFile(fileName, resultLine)
         manager.writeFile(fileName, "Operaciones: ")
-        manager.writeFile(fileName, matrixManager.doOperations(matrices[i]) + "\n")
+        operations = validateMatrixOperation(matrices[i], matrixManager)
+        manager.writeFile(fileName, str(operations) + "\n")
         resultLine = "Resultado por Gauss-Jordan: " + \
             str(jordan[i]) + ".   Resultado por Gauss-Seidel: " + str(seidel[i]) + "\n"
         manager.writeFile(fileName, resultLine)

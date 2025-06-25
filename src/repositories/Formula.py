@@ -147,62 +147,79 @@ class Formula:
         """
         while "(" in formula and ")" in formula:
             formula, resultsCount = self.__calcParenthesis(formula, results, resultsCount)
-        for operator in np.array(["*", "/", "+", "-"]):
-            while formula.find(operator) != -1:
-                n = formula.find(operator)
-                op1 = None
-                op2 = None
-                if formula[n - 1] in results:
-                    if not self.__isMatrix:
-                        op1 = float(results[formula[n - 1]])
-                    else:
-                        op1 = results[formula[n - 1]]
+        while len(formula) > 1:
+            n = 1
+            if "*" in formula or "/" in formula:
+                mult = formula.find("*")
+                div = formula.find("/")
+                if mult != -1 and div != -1:
+                    if mult < div:
+                        n = mult
+                    elif div < mult:
+                        n = div
+            else:
+                sum = formula.find("+")
+                sub = formula.find("-")
+                if sum != -1 and sub != -1:
+                    if sum < sub:
+                        n = sum
+                    elif sub < sum:
+                        n = sub
+            op1 = None
+            op2 = None
+            operator = formula[n]
+            if formula[n - 1] in results:
+                if not self.__isMatrix:
+                    op1 = float(results[formula[n - 1]])
                 else:
-                    op1 = float(formula[n - 1])
+                    op1 = results[formula[n - 1]]
+            else:
+                op1 = float(formula[n - 1])
 
-                if formula[n + 1] in results:
-                    if not self.__isMatrix:
-                        op2 = float(results[formula[n + 1]])
-                    else:
-                        op2 = results[formula[n + 1]]
+            if formula[n + 1] in results:
+                if not self.__isMatrix:
+                    op2 = float(results[formula[n + 1]])
                 else:
-                    op2 = float(formula[n + 1])
+                    op2 = results[formula[n + 1]]
+            else:
+                op2 = float(formula[n + 1])
 
-                if operator == "*":
-                    if self.__isMatrix:
-                        if len(op1) == len(op2[0]) and len(op2) == len(op1[0]):
-                            results[alpha[resultsCount]] = multiMatrices(op1, op2)
-                        else:
-                            raise Exception("Multiplicacion de matrices no válida")
+
+            if operator == "*":
+                if self.__isMatrix:
+                    if len(op1) == len(op2[0]) and len(op2) == len(op1[0]):
+                        results[alpha[resultsCount]] = multiMatrices(op1, op2)
                     else:
-                        results[alpha[resultsCount]] = op1 * op2
-                elif operator == "/":
-                    if self.__isMatrix:
-                        if len(op1) == len(op2) and len(op2[0]) == len(op1[0]):
-                            results[alpha[resultsCount]] = divideMatrices(op1, op2)
-                        else:
-                            raise Exception("División de matrices no válida")
+                        raise Exception("Multiplicacion de matrices no válida")
+                else:
+                    results[alpha[resultsCount]] = op1 * op2
+            elif operator == "/":
+                if self.__isMatrix:
+                    if len(op1) == len(op2) and len(op2[0]) == len(op1[0]):
+                        results[alpha[resultsCount]] = divideMatrices(op1, op2)
                     else:
-                        results[alpha[resultsCount]] = op1 / op2
-                elif operator == "+":
-                    if self.__isMatrix:
-                        if len(op1) == len(op2) and len(op2[0]) == len(op1[0]):
-                            results[alpha[resultsCount]] = sumaMatrices(op1, op2)
-                        else:
-                            raise Exception("Suma de matrices no válida")
+                        raise Exception("División de matrices no válida")
+                else:
+                    results[alpha[resultsCount]] = op1 / op2
+            elif operator == "+":
+                if self.__isMatrix:
+                    if len(op1) == len(op2) and len(op2[0]) == len(op1[0]):
+                        results[alpha[resultsCount]] = sumaMatrices(op1, op2)
                     else:
-                        results[alpha[resultsCount]] = op1 + op2
-                elif operator == "-":
-                    if self.__isMatrix:
-                        if len(op1) == len(op2) and len(op2[0]) == len(op1[0]):
-                            results[alpha[resultsCount]] = restaMatrices(op1, op2)
-                        else:
-                            raise Exception("Resta de matrices no válida")
+                        raise Exception("Suma de matrices no válida")
+                else:
+                    results[alpha[resultsCount]] = op1 + op2
+            elif operator == "-":
+                if self.__isMatrix:
+                    if len(op1) == len(op2) and len(op2[0]) == len(op1[0]):
+                        results[alpha[resultsCount]] = restaMatrices(op1, op2)
                     else:
-                        results[alpha[resultsCount]] = op1 - op2
-                formula = formula.replace(
-                    f"{formula[n - 1]}{formula[n]}{formula[n + 1]}", alpha[resultsCount])
-                resultsCount += 1
+                        raise Exception("Resta de matrices no válida")
+                else:
+                    results[alpha[resultsCount]] = op1 - op2
+            formula = formula.replace(
+                f"{formula[n - 1]}{formula[n]}{formula[n + 1]}", alpha[resultsCount])
+            resultsCount += 1
         return resultsCount
 
     def getValues(self) -> dict[str, str]:
