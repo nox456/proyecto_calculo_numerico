@@ -6,9 +6,8 @@ from array import ArrayType
 
 
 def getSigFigs(figuresManager: SigFigures, numbers: ArrayType[ArrayType[Number]], fileManager: FileManager) -> None:
-    for fileNumbers in numbers:
-        for number in fileNumbers:
-            if number.isValid():
-                sigFigures = validateFigures(figuresManager, number.getValue(), fileManager)
-                if sigFigures is not None:
-                    number.setFigs(sigFigures)
+    for number in numbers:
+        if number.isValid():
+            sigFigures = validateFigures(figuresManager, number.getValue(), fileManager)
+            if sigFigures is not None:
+                number.setFigs(sigFigures)

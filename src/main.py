@@ -1,4 +1,4 @@
-from proccess.files import selectFiles, createResultFiles, selectFormulas, createFormulasResultFile, getFilesContent, createResultMatrixFile
+from proccess.files import selectFiles, createResultFile, selectFormulas, createFormulasResultFile, getFilesContent
 from proccess.numbers import getNumbers, setSystems, generateResultsFromFormulas, setOperations
 from proccess.matrixConverter import convert
 from proccess.figures import getSigFigs
@@ -15,53 +15,46 @@ def main() -> None:
     path = "./src/storage/sources/"
     fileManager = FileManager(path)
 
+    aux = matrices = convert(fileManager)
+
+    if matrices is None:
+        return
+
+    matrixGauss = instanceValidationJordan(matrices, fileManager)
+    resultJordan = validateJordan(matrixGauss, fileManager)
+
+    matrices = aux
+
+    matrixGauss = instanceValidationSeidel(matrices, fileManager)
+    resultSeidel = validateSeidel(matrixGauss, fileManager)
+
+    matrixManager = MatrixOperations()
+
+    files = selectFiles(fileManager)
+    if files is None or len(files) == 0:
+        print("-- PROGRAMA TERMINADO --")
+        return
+    content = getFilesContent(files)
+    numbers = getNumbers(content, fileManager)
+    if len(numbers) == 0:
+        print("-- PROGRAMA TERMINADO --")
+        return
+
+    systemManager = NumericSystem()
+    setSystems(numbers, systemManager, fileManager)
+
+    figuresManager = SigFigures("0")
+    getSigFigs(figuresManager, numbers, fileManager)
+
+    operationManager = ElementalOperations()
+    setOperations(numbers, operationManager)
+
+    fileManager.setRouter(
+        "./src/storage/results/")
+    createResultFile(fileManager, numbers, matrices,
+                     matrixManager, resultJordan, resultSeidel)
+
     isMatrix = checkIsMatrix(fileManager)
-
-    matrices = None
-    numbers = None
-
-    if isMatrix:
-        aux = matrices = convert(fileManager)
-
-        if matrices is None:
-            return
-
-        matrixGauss = instanceValidationJordan(matrices, fileManager)
-        resultJordan = validateJordan(matrixGauss, fileManager)
-
-        matrices = aux
-
-        matrixGauss = instanceValidationSeidel(matrices, fileManager)
-        resultSeidel = validateSeidel(matrixGauss, fileManager)
-
-        matrixManager = MatrixOperations()
-
-        fileManager.setRouter("./src/storage/results/")
-        createResultMatrixFile(fileManager, matrices, matrixManager,resultJordan, resultSeidel)
-    else:
-        files = selectFiles(fileManager)
-        if files is None or len(files) == 0:
-            print("-- PROGRAMA TERMINADO --")
-            return
-        content = getFilesContent(files)
-        numbers = getNumbers(content, fileManager)
-        if len(numbers) == 0:
-            print("-- PROGRAMA TERMINADO --")
-            return
-
-        systemManager = NumericSystem()
-        setSystems(numbers, systemManager, fileManager)
-
-        figuresManager = SigFigures("0")
-        getSigFigs(figuresManager, numbers, fileManager)
-
-        operationManager = ElementalOperations()
-        setOperations(numbers, operationManager)
-
-        fileManager.setRouter(
-            "./src/storage/results/")
-
-        createResultFiles(fileManager, files, numbers)
 
     formulasEntries = selectFormulas(fileManager, isMatrix)
 
@@ -72,9 +65,9 @@ def main() -> None:
     formulaContent = getFilesContent(formulasEntries)
 
     formulas = getFormulas(formulaContent, fileManager, isMatrix,
-                           numbers if numbers is not None else matrices)
+                           matrices if isMatrix else numbers)
 
-    generateResultsFromFormulas(formulas, numbers, matrices, fileManager)
+    generateResultsFromFormulas(formulas, numbers, matrices, fileManager, isMatrix)
 
     fileManager.setRouter("./src/storage/results/")
     createFormulasResultFile(fileManager, formulas, formulasEntries)

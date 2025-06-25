@@ -23,13 +23,11 @@ def getFormulas(fileContent: ArrayType[ArrayType[str]], manager: FileManager, is
         fileFormulas = np.array([])
         for j in range(len(fileContent[i])):
             if isMatrix:
-                for k in range(len(elems)):
+                formula = validateFormula(fileContent[i][j], manager, isMatrix)
+                fileFormulas = appendArray(fileFormulas, formula)
+            else:
+                for _ in range(math.ceil(len(elems) / 3)):
                     formula = validateFormula(fileContent[i][j], manager, isMatrix)
                     fileFormulas = appendArray(fileFormulas, formula)
-            else:
-                for k in range(len(elems)):
-                    for _ in range(math.ceil(len(elems[k]) / 3)):
-                        formula = validateFormula(fileContent[i][j], manager, isMatrix)
-                        fileFormulas = appendArray(fileFormulas, formula)
         formulas = appendArray(formulas, fileFormulas)
     return formulas

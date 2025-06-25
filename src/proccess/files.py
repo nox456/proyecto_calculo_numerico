@@ -7,6 +7,8 @@ from array import ArrayType
 from repositories.Number import Number
 from repositories.Formula import Formula
 from helpers.arrays import appendArray
+from datetime import datetime
+from repositories.MatrixOperations import MatrixOperations
 
 
 def selectFiles(manager: FileManager) -> ArrayType[FileEntry]:
@@ -29,24 +31,20 @@ def selectFiles(manager: FileManager) -> ArrayType[FileEntry]:
         return filesEntries
 
 
-def createResultFile(manager: FileManager, sourceFileName: str, numbers: ArrayType[Number]) -> None:
-    sourceFileAttributes = np.array(sourceFileName.rstrip(".bin").split("_"))
-    newSerial = random.randint(1000, 9999)
-    resultFileName = f"{sourceFileAttributes[2]}_{
-        sourceFileAttributes[1]}_{newSerial}.txt"
+def createResultNumbersFiles(manager: FileManager, fileName: str, numbers: ArrayType[ArrayType[Number]]) -> None:
     for number in numbers:
         if number.isValid():
             systems = number.getSystems()
             joinedSystems = ""
             for system in systems:
                 joinedSystems = f"{joinedSystems},{system}"
-            resultLine = f"{number.getValue()}#{joinedSystems[1:]}#{number.getFigs()}#{
-                number.getOperations()}\n"
 
+            resultLine = f"{number.getValue()}#{joinedSystems[1:]}#{
+                number.getFigs()}#{number.getOperations()}\n"
         else:
             resultLine = f"{
                 number.getValue()} -> No pertenece a ningun sistema numerico\n"
-        manager.writeFile(resultFileName, resultLine)
+        manager.writeFile(fileName, resultLine)
 
 
 def getFilesContent(files: ArrayType[FileEntry]) -> ArrayType[ArrayType[str]]:
@@ -56,10 +54,8 @@ def getFilesContent(files: ArrayType[FileEntry]) -> ArrayType[ArrayType[str]]:
     return content
 
 
-def createResultMatrixFile(manager: FileManager, matrices, matrixManager, jordan, seidel):
-    newSerial = random.randint(1000, 9999)
-    resultFileName = f"matrix_2025_{newSerial}.txt"
-    for i  in range(len(matrices)):
+def createResultMatrixFile(manager: FileManager, fileName: str,  matrices, matrixManager, jordan, seidel):
+    for i in range(len(matrices)):
         if len(matrices[i]) == 0:
             resultLine = "Matriz vacia\n"
         else:
@@ -67,11 +63,12 @@ def createResultMatrixFile(manager: FileManager, matrices, matrixManager, jordan
             for row in matrices[i]:
                 rowValues = [str(num) for num in row]
                 resultLine += " | ".join(rowValues) + "\n"
-        manager.writeFile(resultFileName, resultLine)
-        manager.writeFile(resultFileName, "Operaciones: ")
-        manager.writeFile(resultFileName, matrixManager.doOperations(matrices[i]) + "\n")
-        resultLine = "Resultado por Gauss-Jordan: " + str(jordan[i]) + ".   Resultado por Gauss-Seidel: " + str(seidel[i]) + "\n"
-        manager.writeFile(resultFileName, resultLine)
+        manager.writeFile(fileName, resultLine)
+        manager.writeFile(fileName, "Operaciones: ")
+        manager.writeFile(fileName, matrixManager.doOperations(matrices[i]) + "\n")
+        resultLine = "Resultado por Gauss-Jordan: " + \
+            str(jordan[i]) + ".   Resultado por Gauss-Seidel: " + str(seidel[i]) + "\n"
+        manager.writeFile(fileName, resultLine)
 
 
 def selectFormulas(manager: FileManager, isMatrix: bool) -> ArrayType[FileEntry]:
@@ -115,23 +112,11 @@ def createFormulasResultFile(manager: FileManager, formulas: ArrayType[Formula],
                 manager.writeFile(resultFileName, resultLine)
 
 
-def createResultFiles(manager: FileManager, files: ArrayType[FileEntry], numbers: ArrayType[ArrayType[Number]]) -> None:
-    for i in range(len(files)):
-        sourceFileName = files[i].getName()
-        sourceFileAttributes = np.array(sourceFileName.rstrip(".bin").split("_"))
-        newSerial = random.randint(1000, 9999)
-        resultFileName = f"{sourceFileAttributes[2]}_{
-            sourceFileAttributes[1]}_{newSerial}.txt"
-        for number in numbers[i]:
-            if number.isValid():
-                systems = number.getSystems()
-                joinedSystems = ""
-                for system in systems:
-                    joinedSystems = f"{joinedSystems},{system}"
-
-                resultLine = f"{number.getValue()}#{joinedSystems[1:]}#{
-                    number.getFigs()}#{number.getOperations()}\n"
-            else:
-                resultLine = f"{
-                    number.getValue()} -> No pertenece a ningun sistema numerico\n"
-            manager.writeFile(resultFileName, resultLine)
+def createResultFile(manager: FileManager, numbers: ArrayType[ArrayType[Number]], matrices: ArrayType[ArrayType[ArrayType[int]]], matrixManager: MatrixOperations, jordan, seidel) -> None:
+    now = datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
+    serial = random.randint(1000, 9999)
+    resultFileName = f"result_{now}_{serial}.txt"
+    createResultNumbersFiles(manager, resultFileName, numbers)
+    manager.writeFile(resultFileName, "\n-----------------------------------------\n\n")
+    createResultMatrixFile(manager, resultFileName, matrices,
+                           matrixManager, jordan, seidel)

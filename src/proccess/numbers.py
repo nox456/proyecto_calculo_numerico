@@ -26,28 +26,29 @@ def getNumbers(fileContent: ArrayType[ArrayType[str]], manager: FileManager, inM
                     if inMatrix:
                         numbersLines = appendArray(numbersLines, number)
                     else:
-                        fileNumbers = appendArray(fileNumbers, number)
+                        numbers = appendArray(numbers, number)
                 if inMatrix:
                     fileNumbers = appendArray(fileNumbers, numbersLines)
-        numbers = appendArray(numbers, fileNumbers)
+        if inMatrix:
+            numbers = appendArray(numbers, fileNumbers)
     return numbers
 
 
-def generateResultsFromFormulas(formulas: ArrayType[ArrayType[Formula]], numbers: ArrayType[ArrayType[Number]], matrices: ArrayType[ArrayType[ArrayType[int]]], manager: FileManager) -> None:
-    if numbers is not None:
-        for i in range(len(formulas)):
-            j = 0
-            while j < len(formulas[i]):
-                for k in range(len(numbers)):
-                    numbersParts = getNumbersTrios(numbers[k])
-                    for i2 in range(len(numbersParts)):
-                        formulas[i][j].evaluateNumbersFormula(numbersParts[i2])
-                        j += 1
-    if matrices is not None:
+def generateResultsFromFormulas(formulas: ArrayType[ArrayType[Formula]], numbers: ArrayType[ArrayType[Number]], matrices: ArrayType[ArrayType[ArrayType[int]]], manager: FileManager, isMatrix: bool) -> None:
+    if isMatrix:
         for i in range(len(formulas)):
             for j in range(len(formulas[i])):
                 for matrix in matrices:
                     formulas[i][j].evaluateMatrixFormula(matrices, manager)
+    else:
+        for i in range(len(formulas)):
+            j = 0
+            while j < len(formulas[i]):
+                numbersParts = getNumbersTrios(numbers)
+                for i2 in range(len(numbersParts)):
+                    formulas[i][j].evaluateNumbersFormula(numbersParts[i2])
+                    j += 1
+
 
 
 def getNumbersTrios(numbers: ArrayType[Number]) -> ArrayType[ArrayType[Number]]:
@@ -57,18 +58,17 @@ def getNumbersTrios(numbers: ArrayType[Number]) -> ArrayType[ArrayType[Number]]:
 
 
 def setOperations(numbers: ArrayType[Number], operationsManager: ElementalOperations) -> None:
-    for fileNumbers in numbers:
-        for number in fileNumbers:
-            if number.isValid():
-                operations = validateOperations(
-                    operationsManager, number.getValue(), number.getSystems())
-                if operations is not None:
-                    number.setOperations(operations)
+    for number in numbers:
+        if number.isValid():
+            operations = validateOperations(
+                operationsManager, number.getValue(), number.getSystems())
+            if operations is not None:
+                number.setOperations(operations)
 
 
 def setSystems(numbers: ArrayType[ArrayType[Number]], systemManager: NumericSystem, manager: FileManager, inMatrix: bool = False) -> None:
-    for fileNumbers in numbers:
-        if inMatrix:
+    if inMatrix:
+        for fileNumbers in numbers:
             for number in fileNumbers:
                 for i in range(len(number)):
                     if number[i].isValid():
@@ -76,10 +76,10 @@ def setSystems(numbers: ArrayType[ArrayType[Number]], systemManager: NumericSyst
                             systemManager, number[i].getValue(), manager)
                         if systems is not None:
                             number[i].setSystems(systems)
-        else:
-            for number in fileNumbers:
-                if number.isValid():
-                    systems = validatePossibleSystems(
-                        systemManager, number.getValue(), manager)
-                    if systems is not None:
-                        number.setSystems(systems)
+    else:
+        for number in numbers:
+            if number.isValid():
+                systems = validatePossibleSystems(
+                    systemManager, number.getValue(), manager)
+                if systems is not None:
+                    number.setSystems(systems)
