@@ -107,6 +107,10 @@ class MatrixOperations:
         Returns:
             str: Operaciones realizadas
         """
+        if len(matrix) <= 1:
+            raise ValueError("Matriz invalida")
+        if len(matrix[0]) <= 1:
+            raise ValueError("Matriz invalida")
         self.__matrix = matrix.copy()
         self.__operations = ""
         m = self.__swapRow()

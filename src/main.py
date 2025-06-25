@@ -17,7 +17,7 @@ def main() -> None:
 
     aux = matrices = convert(fileManager)
 
-    if matrices is None:
+    if matrices is None or len(matrices) == 0:
         return
 
     matrixGauss = instanceValidationJordan(matrices, fileManager)
@@ -35,6 +35,9 @@ def main() -> None:
         print("-- PROGRAMA TERMINADO --")
         return
     content = getFilesContent(files)
+    if len(content) == 0:
+        print("Archivo vacío")
+        return
     numbers = getNumbers(content, fileManager)
     if len(numbers) == 0:
         print("-- PROGRAMA TERMINADO --")

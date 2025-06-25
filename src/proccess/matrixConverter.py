@@ -49,6 +49,9 @@ def createMatrix(filaColum: ArrayType[int]) -> ArrayType[ArrayType[int]]:
 
 def fillMatrix(files, matrix, filCol, manager):
     content = getFilesContent(files)
+    if len(content) == 0:
+        print("Archivo vacío")
+        return
     numbers = getNumbers(content, manager, True)
     systemManager = NumericSystem()
     setSystems(numbers, systemManager, manager, True)

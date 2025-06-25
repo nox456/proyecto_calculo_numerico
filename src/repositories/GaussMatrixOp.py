@@ -2,6 +2,7 @@ import numpy as np
 from helpers.arrays import appendArray
 from validations.operations import validateGaussOperation
 
+
 class GaussMatrixOp:
     __matrices = np.array([])
 
@@ -11,7 +12,7 @@ class GaussMatrixOp:
         else:
             self.__matrices = mat
 
-    #setters
+    # setters
     def setMatrix(self, matrix):
         if matrix == None:
             raise ValueError("Error: Es necesario tener las matrices")
@@ -19,24 +20,24 @@ class GaussMatrixOp:
             raise ValueError("Error: No hay matrices")
         else:
             self.__matrices = matrix
-    
-    #getters
+
+    # getters
     def getMatrix(self):
         return self.__matrices
 
-    #methods
+    # methods
     def operation(self, matrix):
         A = np.array(matrix, dtype=float)
         n = len(A)
         for i in range(n):
             if A[i, i] == 0:
-                raise ValueError("División por cero en la fila {}".format(i))
+                raise ValueError("Esta matriz tiene infinitas soluciones")
             A[i] = A[i] / A[i, i]
             for j in range(n):
                 if i != j:
                     A[j] = A[j] - A[j, i] * A[i]
         return A[:, -1]
-    
+
     def addToMatrix(self, matrix):
         matrixAux = np.zeros((len(matrix), len(matrix[0]) + 1))
         for i in range(len(matrix)):
@@ -46,9 +47,9 @@ class GaussMatrixOp:
         return matrixAux
 
     def cantMatrx(self):
-        n=0
+        n = 0
         for rows in self.__matrices:
-            n+=1
+            n += 1
         return n
 
     def checkMatrix(self, matrix):
@@ -57,13 +58,13 @@ class GaussMatrixOp:
         if len(matrix) != len(matrix[0]):
             return "Al no ser una matriz cuadrada, tendra o infinitas soluciones o ninguna solucion"
         return ""
-    
+
     def startOperation(self):
         results = np.array([])
         for matrix in self.__matrices:
             result = self.checkMatrix(matrix)
             matrix = self.addToMatrix(matrix)
-            np.set_printoptions(suppress=True,precision=3,floatmode='fixed')
+            np.set_printoptions(suppress=True, precision=3, floatmode='fixed')
             if result == "":
                 result = validateGaussOperation(self, matrix)
             results = appendArray(results, result)
