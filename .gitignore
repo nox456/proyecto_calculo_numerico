@@ -1,2 +1,3 @@
 src/storage/**/*.txt
+src/storage/**/*.log
 **/__pycache__/
