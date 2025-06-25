@@ -1,5 +1,6 @@
 import numpy as np
 from helpers.arrays import appendArray
+from validations.operations import validateGaussOperation
 
 
 class SeidelMatrixOp:
@@ -61,8 +62,6 @@ class SeidelMatrixOp:
                         return False
         return True
 
-    import numpy as np
-
     def convertDominant(self, matrix):
         n = len(matrix)
         for i in range(n):
@@ -77,7 +76,7 @@ class SeidelMatrixOp:
                 matrix[[i, maxIndex]] = matrix[[maxIndex, i]]
         if not self.isDominant(matrix):
             raise ValueError(
-                f"La matriz no es diagonalmente dominante después de reordenar.")
+                f"No es posible realizar esta operacion.")
         return matrix
 
     def addToMatrix(self, matrix):
@@ -99,11 +98,13 @@ class SeidelMatrixOp:
         return ""
 
     def startOperation(self):
+        results = np.array([])
         for matrix in self.__matrices:
             result = self.checkMatrix(matrix)
             if result != "":
                 return result
             matrix = self.addToMatrix(matrix)
             np.set_printoptions(suppress=True, precision=3, floatmode='fixed')
-            result = self.operation(matrix)
-            return result
+            result = validateGaussOperation(self, matrix)
+            results = appendArray(results, result)
+        return results

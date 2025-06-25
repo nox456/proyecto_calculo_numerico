@@ -23,18 +23,21 @@ def main() -> None:
     if isMatrix:
         aux = matrices = convert(fileManager)
 
+        if matrices is None:
+            return
+
         matrixGauss = instanceValidationJordan(matrices, fileManager)
-        validateJordan(matrixGauss, fileManager)
+        resultJordan = validateJordan(matrixGauss, fileManager)
 
         matrices = aux
 
         matrixGauss = instanceValidationSeidel(matrices, fileManager)
-        validateSeidel(matrixGauss, fileManager)
+        resultSeidel = validateSeidel(matrixGauss, fileManager)
 
         matrixManager = MatrixOperations()
 
         fileManager.setRouter("./src/storage/results/")
-        createResultMatrixFile(fileManager, matrices, matrixManager)
+        createResultMatrixFile(fileManager, matrices, matrixManager,resultJordan, resultSeidel)
     else:
         files = selectFiles(fileManager)
         if files is None or len(files) == 0:
